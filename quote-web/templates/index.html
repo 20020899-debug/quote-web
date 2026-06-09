@@ -2,17 +2,21 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Báo giá</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo giá xưởng</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <div class="container">
 
-    <h2>BÁO GIÁ XƯỞNG</h2>
+    <div class="header">
+        <h2>BÁO GIÁ XƯỞNG</h2>
 
-    <div class="toolbar">
-        <button onclick="addRow()">+ Thêm dòng</button>
+        <button class="btn-add" onclick="addRow()">
+            + Thêm dòng
+        </button>
     </div>
 
     <div class="table-wrapper">
@@ -21,14 +25,14 @@
 
             <thead>
                 <tr>
-                    <th width="60">STT</th>
+                    <th style="width:60px">STT</th>
                     <th>Sản phẩm</th>
-                    <th width="180">Vật liệu</th>
-                    <th width="100">Đơn vị</th>
-                    <th width="140">Đơn giá</th>
-                    <th width="120">Số lượng</th>
-                    <th width="160">Thành tiền</th>
-                    <th width="60"></th>
+                    <th style="width:180px">Vật liệu</th>
+                    <th style="width:100px">ĐVT</th>
+                    <th style="width:140px">Đơn giá</th>
+                    <th style="width:120px">Số lượng</th>
+                    <th style="width:180px">Thành tiền</th>
+                    <th style="width:60px"></th>
                 </tr>
             </thead>
 
@@ -41,7 +45,7 @@
                         TỔNG CỘNG
                     </td>
 
-                    <td id="total">
+                    <td id="total" class="total-value">
                         0
                     </td>
 
@@ -55,7 +59,7 @@
 
 </div>
 
-<script src="/static/app.js"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
 
 </body>
 </html>
