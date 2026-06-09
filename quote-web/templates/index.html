@@ -2,29 +2,27 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Web Báo Giá</title>
+    <title>Báo giá</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-<div class="container">
+<h2>FORM BÁO GIÁ</h2>
 
-    <h2>WEB BÁO GIÁ SẢN PHẨM</h2>
+<button onclick="addRow()">+ Thêm dòng</button>
 
-    <div class="search-box">
-        <input type="text" id="keyword" placeholder="Nhập mã SP / tên / vật liệu...">
-        <button onclick="search()">Tìm kiếm</button>
-        <button onclick="loadAll()">Tất cả</button>
-    </div>
-
-    <table>
-        <thead>
-            <tr id="header"></tr>
-        </thead>
-        <tbody id="body"></tbody>
-    </table>
-
-</div>
+<table id="table">
+    <thead>
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Mã SP</th>
+            <th>Vật liệu</th>
+            <th>ĐVT</th>
+            <th>Đơn giá</th>
+        </tr>
+    </thead>
+    <tbody id="body"></tbody>
+</table>
 
 <script src="/static/app.js"></script>
 </body>
