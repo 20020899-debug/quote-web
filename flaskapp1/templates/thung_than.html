@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tính khối lượng thùng than</title>
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+{% include 'menu.html' %}
+
+<h2>TÍNH KHỐI LƯỢNG THÙNG THAN</h2>
+
+<form method="post">
+
+<!-- ================= THÔNG SỐ ================= -->
+<div class="box">
+<h3>THÔNG SỐ</h3>
+
+<label>Chiều dài tổng</label>
+<input name="Chiều dài tổng"
+       value="{{ form.get('Chiều dài tổng', '') }}"><br>
+       
+<label>Chiều dài thùng</label>
+<input name="Chiều dài thùng"
+       value="{{ form.get('Chiều dài thùng', '') }}"><br>
+
+<label>Chiều rộng</label>
+<input name="Chiều rộng"
+       value="{{ form.get('Chiều rộng', '') }}"><br>
+
+<label>Chiều cao</label>
+<input name="Chiều cao"
+       value="{{ form.get('Chiều cao', '') }}"><br>
+
+<label>Độ dày tôn</label>
+<input name="Độ dày tôn"
+       value="{{ form.get('Độ dày tôn', '') }}"><br>
+
+<label>Kích thước đầu vào</label>
+<input name="Kích thước đầu vào"
+       value="{{ form.get('Kích thước đầu vào', '') }}"><br>
+</div>
+
+<!-- ================= CHÂN ĐẾ ================= -->
+<div class="box">
+<h3>CHÂN ĐẾ</h3>
+
+<label>U100x50</label>
+<input name="U100x50"
+       value="{{ form.get('U100x50', '') }}"><br>
+
+<label>U150x75</label>
+<input name="U150x75"
+       value="{{ form.get('U150x75', '') }}"><br>
+</div>
+    <!-- ================= SÀN THAN ================= -->
+<div class="box">
+<h3>SÀN THAN</h3>
+
+<label>Số tầng</label>
+<input name="Số tầng"
+       value="{{ form.get('Số tầng', '') }}"><br>
+
+<label>Chiều dày lớp than</label>
+<input name="Chiều dày lớp than"
+       value="{{ form.get('Chiều dày lớp than', '') }}"><br>
+
+</div>
+
+<!-- ================= KHAY THAN ================= -->
+<div class="box">
+<h3>KHỐI LƯỢNG KHAY ĐỰNG THAN</h3>
+<label>Dài khay</label>
+<input name="Dài khay"
+       value="{{ form.get('Dài khay', '') }}"><br>
+
+<label>Rộng khay</label>
+<input name="Rộng khay"
+       value="{{ form.get('Rộng khay', '') }}"><br>
+
+<label>Cao khay</label>
+<input name="Cao khay"
+       value="{{ form.get('Cao khay', '') }}"><br>
+
+<label>Số khay</label>
+<input name="Số khay"
+       value="{{ form.get('Số khay', '') }}"><br>
+
+<label>Số tầng khay</label>
+<input name="Số tầng khay"
+       value="{{ form.get('Số tầng khay', '') }}"><br>
+
+<label>Độ dày khay</label>
+<input name="Độ dày khay"
+       value="{{ form.get('Độ dày khay', '') }}"><br>
+
+<label>Chiều dài tổng khay</label>
+<input name="Chiều dài tổng khay"
+       value="{{ form.get('Chiều dài tổng khay', '') }}"><br>
+
+<label>Số tấm lọc</label>
+<input name="Số tấm lọc"
+       value="{{ form.get('Số tấm lọc', '') }}"><br>
+</div>
+
+<button type="submit">TÍNH TOÁN</button>
+
+</form>
+
+<!-- ================= KẾT QUẢ ================= -->
+<h3>KẾT QUẢ</h3>
+<pre>{{ ket_qua }}</pre>
+
+</body>
+</html>

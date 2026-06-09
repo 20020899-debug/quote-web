@@ -1,0 +1,136 @@
+body{
+    font-family: Arial;
+    margin: 20px;
+}
+
+/* BOX */
+.box{
+    background:white;
+    border-radius:10px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+/* INPUT */
+label{
+    display:inline-block;
+    width:220px;
+    font-weight:500;
+    margin-bottom:5px;
+}
+
+input{
+    width:200px;
+    padding:5px;
+    margin-bottom:8px;
+}
+
+/* FILE INPUT riêng cho PDF */
+input[type="file"]{
+    width:auto;
+    padding:10px;
+}
+
+/* BUTTON */
+button{
+    padding:10px 20px;
+    cursor:pointer;
+    font-weight:bold;
+    border:none;
+    border-radius:6px;
+    background:#28a745;   /* xanh lá */
+    color:white;
+    transition:0.2s;
+}
+
+button:hover{
+    background:#218838;   /* xanh đậm hơn khi hover */
+}
+
+button:active{
+    transform:scale(0.98);
+}
+
+/* TEXT OUTPUT */
+pre{
+    background:#f4f4f4;
+    padding:12px;
+    white-space:pre-wrap;
+}
+
+/* LINK */
+a{
+    text-decoration:none;
+    color:blue;
+}
+
+/* MENU */
+.menu a{
+    padding:8px 12px;
+    text-decoration:none;
+    color:black;
+    border-radius:6px;
+    display:inline-block;
+}
+
+.menu a.active{
+    background:#0d6efd;
+    color:white;
+    font-weight:bold;
+}
+
+.menu a:hover{
+    background:#e9ecef;
+}
+
+/* PDF DROP AREA */
+#drop-area{
+    border:2px dashed #0d6efd;
+    border-radius:10px;
+    padding:30px;
+    text-align:center;
+    background:#f8f9fa;
+    margin-bottom:15px;
+}
+
+#drop-area:hover{
+    background:#eef5ff;
+}
+
+/* FILE LIST */
+#file-list{
+    margin-top:10px;
+}
+
+/* PDF ROW */
+.pdf-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px;
+    border-bottom:1px solid #ddd;
+    cursor:grab;
+    gap:10px;
+}
+
+.pdf-row:active{
+    cursor:grabbing;
+    background:#f1f1f1;
+}
+
+/* DELETE BUTTON */
+.pdf-row button{
+    background:#dc3545;
+    color:white;
+    border-radius:5px;
+    padding:4px 10px;
+}
+
+/* PDF PREVIEW */
+.pdf-row canvas{
+    border:1px solid #ccc;
+    border-radius:7px;
+    width:120px;
+    height:auto;
+}
