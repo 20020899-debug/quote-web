@@ -7,26 +7,55 @@
 </head>
 <body>
 
-<h2>BÁO GIÁ XƯỞNG</h2>
+<div class="container">
 
-<button onclick="addRow()">+ Thêm dòng</button>
+    <h2>BÁO GIÁ XƯỞNG</h2>
 
-<table>
-    <thead>
-        <tr>
-            <th>Sản phẩm</th>
-            <th>Vật liệu</th>
-            <th>Đơn vị</th>
-            <th>Đơn giá</th>
-            <th>Số lượng</th>
-            <th>Thành tiền</th>
-        </tr>
-    </thead>
-    <tbody id="body"></tbody>
-</table>
+    <div class="toolbar">
+        <button onclick="addRow()">+ Thêm dòng</button>
+    </div>
 
-<h3 id="total">Tổng: 0</h3>
+    <div class="table-wrapper">
+
+        <table id="quoteTable">
+
+            <thead>
+                <tr>
+                    <th width="60">STT</th>
+                    <th>Sản phẩm</th>
+                    <th width="180">Vật liệu</th>
+                    <th width="100">Đơn vị</th>
+                    <th width="140">Đơn giá</th>
+                    <th width="120">Số lượng</th>
+                    <th width="160">Thành tiền</th>
+                    <th width="60"></th>
+                </tr>
+            </thead>
+
+            <tbody id="body">
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="6" class="total-label">
+                        TỔNG CỘNG
+                    </td>
+
+                    <td id="total">
+                        0
+                    </td>
+
+                    <td></td>
+                </tr>
+            </tfoot>
+
+        </table>
+
+    </div>
+
+</div>
 
 <script src="/static/app.js"></script>
+
 </body>
 </html>
