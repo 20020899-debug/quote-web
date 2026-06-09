@@ -1,5 +1,7 @@
+
 let data = [];
 
+// ================== LOAD DATA ==================
 async function loadData() {
     let res = await fetch("/data");
     data = await res.json();
@@ -8,7 +10,7 @@ async function loadData() {
 loadData();
 
 
-// ===== ADD ROW =====
+// ================== ADD ROW ==================
 function addRow() {
     let body = document.getElementById("body");
 
@@ -24,20 +26,26 @@ function addRow() {
             <select onchange="onMaterialChange(this)"></select>
         </td>
 
+        <td class="unit"></td>
+
         <td class="price">0</td>
 
         <td>
-            <input type="number" value="1" oninput="calcRow(this)">
+            <input type="number" value="1" min="0" oninput="calcRow(this)">
         </td>
 
         <td class="total">0</td>
     `;
 
+    // lưu state
+    row.dataset.ma = "";
+    row.dataset.price = "0";
+
     body.appendChild(row);
 }
 
 
-// ===== AUTOCOMPLETE SEARCH =====
+// ================== SEARCH PRODUCT (GOOGLE STYLE) ==================
 function searchProduct(input) {
     let val = input.value.toLowerCase();
     let dropdown = input.nextElementSibling;
@@ -46,73 +54,83 @@ function searchProduct(input) {
 
     if (!val) return;
 
-    let matches = [...new Set(data
-        .filter(d => (d["TenSP"] || "").toLowerCase().includes(val))
-        .map(d => d["MaSP"])
-    )].slice(0, 5);
+    let matches = [...new Set(
+        data
+        .filter(d => (d.TenSP || "").toLowerCase().includes(val))
+        .map(d => d.MaSP)
+    )].slice(0, 6);
 
     matches.forEach(ma => {
-        let item = data.find(d => d["MaSP"] === ma);
+        let item = data.find(d => d.MaSP === ma);
 
         let div = document.createElement("div");
-        div.innerText = item["TenSP"];
+        div.innerText = item.TenSP;
 
-        div.onclick = () => {
-            selectProduct(input, ma);
-            dropdown.innerHTML = "";
-        };
+        div.onclick = () => selectProduct(input, ma);
 
         dropdown.appendChild(div);
     });
 }
 
 
-// ===== CHỌN SẢN PHẨM =====
+// ================== SELECT PRODUCT ==================
 function selectProduct(input, ma) {
     let row = input.parentElement.parentElement;
 
-    input.value = data.find(d => d["MaSP"] === ma)["TenSP"];
+    row.dataset.ma = ma;
 
-    let matSelect = row.children[1].querySelector("select");
+    let item = data.find(d => d.MaSP === ma);
+
+    input.value = item.TenSP;
+
+    let matSelect = row.querySelector("select");
     matSelect.innerHTML = "";
 
-    let mats = data.filter(d => d["MaSP"] === ma);
+    let mats = data.filter(d => d.MaSP === ma);
 
-    mats.forEach(d => {
+    mats.forEach(m => {
         let opt = document.createElement("option");
-        opt.value = d["VatLieu"];
-        opt.innerText = d["VatLieu"];
+        opt.value = m.VatLieu;
+        opt.innerText = m.VatLieu;
         matSelect.appendChild(opt);
     });
 
-    matSelect.dataset.ma = ma;
-
+    // auto trigger material
     onMaterialChange(matSelect);
+
+    // clear dropdown
+    input.nextElementSibling.innerHTML = "";
 }
 
 
-// ===== CHỌN VẬT LIỆU =====
-function onMaterialChange(el) {
-    let row = el.parentElement.parentElement;
+// ================== CHANGE MATERIAL ==================
+function onMaterialChange(select) {
+    let row = select.parentElement.parentElement;
 
-    let ma = el.dataset.ma;
-    let vl = el.value;
+    let ma = row.dataset.ma;
+    let vl = select.value;
 
     let item = data.find(d =>
-        d["MaSP"] === ma && d["VatLieu"] === vl
+        d.MaSP === ma &&
+        d.VatLieu === vl
     );
 
-    if (!item) return;
+    if (!item) {
+        row.children[3].innerText = 0;
+        row.dataset.price = 0;
+        return;
+    }
 
-    row.dataset.price = item["DonGiaCoSo"];
+    row.dataset.price = item.DonGia;
 
-    row.children[2].innerText = item["DonGiaCoSo"];
+    row.children[2].innerText = item.DonVi;
+    row.children[3].innerText = item.DonGia;
 
-    calcRow(row.children[3].querySelector("input"));
+    calcRow(row.children[4].querySelector("input"));
 }
 
 
-// ===== TÍNH DÒNG =====
+// ================== CALC ROW ==================
 function calcRow(input) {
     let row = input.parentElement.parentElement;
 
@@ -121,13 +139,13 @@ function calcRow(input) {
 
     let total = price * qty;
 
-    row.children[4].innerText = total;
+    row.children[5].innerText = total;
 
     calcTotal();
 }
 
 
-// ===== TỔNG TIỀN =====
+// ================== TOTAL ==================
 function calcTotal() {
     let sum = 0;
 
@@ -135,5 +153,6 @@ function calcTotal() {
         sum += parseFloat(el.innerText || 0);
     });
 
-    document.getElementById("total").innerText = "Tổng: " + sum;
+    document.getElementById("total").innerText =
+        "Tổng tiền: " + sum.toLocaleString("vi-VN");
 }
