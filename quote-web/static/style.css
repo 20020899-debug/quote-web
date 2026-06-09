@@ -251,7 +251,7 @@ tbody tr:hover{
 }
 .company-info{
     position: absolute;
-    top: 50%;
+    top: 10%;
     left: 30px;          /* 👈 đổi từ right sang left */
     transform: translateY(-50%);
 
