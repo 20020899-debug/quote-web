@@ -236,3 +236,11 @@ tbody tr:hover{
         width:100%;
     }
 }
+.system-title{
+    background:#198754;
+    color:white;
+    font-weight:bold;
+    text-align:center;
+    font-size:16px;
+    padding:10px;
+}
