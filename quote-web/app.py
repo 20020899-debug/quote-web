@@ -11,21 +11,19 @@ app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 EXCEL_FILE = os.path.join(BASE_DIR, "bang_gia.xlsx")
 
+print("BASE_DIR =", BASE_DIR)
+print("EXCEL_FILE =", EXCEL_FILE)
+print("FILE EXISTS =", os.path.exists(EXCEL_FILE))
+
 try:
     df = pd.read_excel(EXCEL_FILE)
 
-    # Xóa khoảng trắng tên cột
-    df.columns = df.columns.str.strip()
-
-    # Thay NaN thành ""
-    df = df.fillna("")
-
-    # Ép kiểu để tránh undefined
-    for col in df.columns:
-        df[col] = df[col].astype(str)
+    print("Đọc Excel thành công")
+    print("Columns:", df.columns.tolist())
+    print(df.head())
 
 except Exception as e:
-    print("Lỗi đọc Excel:", e)
+    print("LỖI ĐỌC EXCEL:", e)
 
     # DataFrame rỗng để web không crash
     df = pd.DataFrame(
