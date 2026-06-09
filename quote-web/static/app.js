@@ -4,12 +4,15 @@ let data = [];
 // LOAD DATA
 // =========================
 async function loadData() {
-    const res = await fetch("/data");
-    data = await res.json();
+    try {
+        const res = await fetch("/data");
+        data = await res.json();
+
+        console.log("Đã load:", data.length, "dòng");
+    } catch (err) {
+        console.error("Lỗi load data:", err);
+    }
 }
-
-loadData();
-
 
 // =========================
 // FORMAT TIỀN
@@ -18,6 +21,15 @@ function formatMoney(value) {
     return Number(value || 0).toLocaleString("vi-VN");
 }
 
+// =========================
+// ĐÁNH STT
+// =========================
+function updateSTT() {
+    document.querySelectorAll("#body tr")
+        .forEach((row, index) => {
+            row.querySelector(".stt").textContent = index + 1;
+        });
+}
 
 // =========================
 // THÊM DÒNG
@@ -32,17 +44,25 @@ function addRow() {
     tr.dataset.price = 0;
 
     tr.innerHTML = `
+        <td class="stt"></td>
+
         <td style="position:relative;">
-            <input type="text"
-                   class="product-search"
-                   placeholder="Tìm sản phẩm..."
-                   oninput="searchProduct(this)">
+            <input
+                type="text"
+                class="product-search"
+                placeholder="Tìm sản phẩm..."
+                autocomplete="off"
+                oninput="searchProduct(this)"
+            >
 
             <div class="dropdown"></div>
         </td>
 
         <td>
-            <select onchange="changeMaterial(this)">
+            <select
+                class="material-select"
+                onchange="changeMaterial(this)"
+            >
                 <option value="">-- Chọn --</option>
             </select>
         </td>
@@ -52,23 +72,28 @@ function addRow() {
         <td class="price">0</td>
 
         <td>
-            <input type="number"
-                   value="1"
-                   min="0"
-                   step="0.01"
-                   oninput="calcRow(this)">
+            <input
+                type="number"
+                value="1"
+                min="0"
+                step="0.01"
+                oninput="calcRow(this)"
+            >
         </td>
 
         <td class="amount">0</td>
 
         <td>
-            <button onclick="deleteRow(this)">X</button>
+            <button onclick="deleteRow(this)">
+                ✖
+            </button>
         </td>
     `;
 
     tbody.appendChild(tr);
-}
 
+    updateSTT();
+}
 
 // =========================
 // XÓA DÒNG
@@ -77,9 +102,10 @@ function deleteRow(btn) {
 
     btn.closest("tr").remove();
 
+    updateSTT();
+
     calcTotal();
 }
-
 
 // =========================
 // SEARCH SẢN PHẨM
@@ -92,15 +118,18 @@ function searchProduct(input) {
 
     dropdown.innerHTML = "";
 
-    if (!keyword) return;
+    if (!keyword) {
+        dropdown.style.display = "none";
+        return;
+    }
 
     const products = [];
 
     data.forEach(item => {
 
         if (
-            item.TenSP.toLowerCase().includes(keyword)
-            &&
+            item.TenSP &&
+            item.TenSP.toLowerCase().includes(keyword) &&
             !products.some(p => p.MaSP === item.MaSP)
         ) {
             products.push(item);
@@ -111,14 +140,23 @@ function searchProduct(input) {
 
         const div = document.createElement("div");
 
-        div.innerText = item.TenSP;
+        div.className = "dropdown-item";
 
-        div.onclick = () => selectProduct(input, item);
+        div.innerHTML = `
+            <b>${item.MaSP}</b><br>
+            ${item.TenSP}
+        `;
+
+        div.onclick = () => {
+            selectProduct(input, item);
+        };
 
         dropdown.appendChild(div);
     });
-}
 
+    dropdown.style.display =
+        products.length ? "block" : "none";
+}
 
 // =========================
 // CHỌN SẢN PHẨM
@@ -131,10 +169,12 @@ function selectProduct(input, product) {
 
     input.value = product.TenSP;
 
-    input.nextElementSibling.innerHTML = "";
+    const dropdown = input.nextElementSibling;
+    dropdown.innerHTML = "";
+    dropdown.style.display = "none";
 
     const materialSelect =
-        row.children[1].querySelector("select");
+        row.querySelector(".material-select");
 
     materialSelect.innerHTML = "";
 
@@ -148,7 +188,8 @@ function selectProduct(input, product) {
 
     materials.forEach(vl => {
 
-        const option = document.createElement("option");
+        const option =
+            document.createElement("option");
 
         option.value = vl;
         option.textContent = vl;
@@ -158,7 +199,6 @@ function selectProduct(input, product) {
 
     changeMaterial(materialSelect);
 }
-
 
 // =========================
 // ĐỔI VẬT LIỆU
@@ -178,31 +218,31 @@ function changeMaterial(select) {
 
     if (!item) {
 
-        row.children[2].textContent = "";
+        row.querySelector(".unit").textContent = "";
 
-        row.children[3].textContent = "0";
+        row.querySelector(".price").textContent = "0";
 
         row.dataset.price = 0;
 
         calcRow(
-            row.children[4].querySelector("input")
+            row.querySelector("input[type='number']")
         );
 
         return;
     }
 
-    row.children[2].textContent = item.DonVi;
+    row.querySelector(".unit").textContent =
+        item.DonVi;
 
-    row.children[3].textContent =
+    row.querySelector(".price").textContent =
         formatMoney(item.DonGia);
 
     row.dataset.price = item.DonGia;
 
     calcRow(
-        row.children[4].querySelector("input")
+        row.querySelector("input[type='number']")
     );
 }
-
 
 // =========================
 // TÍNH THÀNH TIỀN
@@ -219,12 +259,11 @@ function calcRow(input) {
 
     const amount = qty * price;
 
-    row.children[5].textContent =
+    row.querySelector(".amount").textContent =
         formatMoney(amount);
 
     calcTotal();
 }
-
 
 // =========================
 // TỔNG TIỀN
@@ -233,14 +272,15 @@ function calcTotal() {
 
     let total = 0;
 
-    document.querySelectorAll("#body tr")
+    document
+        .querySelectorAll("#body tr")
         .forEach(row => {
 
             const qty =
                 parseFloat(
-                    row.children[4]
-                        .querySelector("input")
-                        .value
+                    row.querySelector(
+                        "input[type='number']"
+                    ).value
                 ) || 0;
 
             const price =
@@ -249,8 +289,16 @@ function calcTotal() {
             total += qty * price;
         });
 
-    document.getElementById("total")
-        .innerText =
-        "Tổng tiền: " +
+    document.getElementById("total").textContent =
         formatMoney(total);
 }
+
+// =========================
+// KHỞI TẠO
+// =========================
+window.onload = async function () {
+
+    await loadData();
+
+    addRow();
+};
