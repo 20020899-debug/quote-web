@@ -5,6 +5,7 @@ app = Flask(__name__)
 
 df = pd.read_excel("bang_gia.xlsx")
 df.columns = df.columns.str.strip()
+print(df.columns.tolist())
 
 df["Mã SP"] = df["Mã SP"].astype(str)
 df["Tên sản phẩm"] = df["Tên sản phẩm"].astype(str)
@@ -18,13 +19,16 @@ def home():
 
 @app.route("/search")
 def search():
-    q = request.args.get("q", "").lower()
+    q = request.args.get("q", "").lower().strip()
 
     temp = df[["Mã SP", "Tên sản phẩm"]].drop_duplicates()
 
     result = []
+
     for _, row in temp.iterrows():
-        if q in row["Tên sản phẩm"].lower():
+        name = str(row["Tên sản phẩm"]).lower()
+
+        if q in name:
             result.append({
                 "code": row["Mã SP"],
                 "name": row["Tên sản phẩm"]
