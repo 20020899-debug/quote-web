@@ -1,45 +1,65 @@
-async function search() {
-    let q = document.getElementById("keyword").value;
+let products = [];
 
-    let res = await fetch(`/search?q=${q}`);
-    let data = await res.json();
-
-    render(data);
+async function loadProducts() {
+    let res = await fetch("/products");
+    products = await res.json();
 }
 
-async function loadAll() {
-    let res = await fetch(`/all`);
-    let data = await res.json();
+loadProducts();
 
-    render(data);
-}
-
-function render(data) {
-    let header = document.getElementById("header");
+// thêm dòng mới
+function addRow() {
     let body = document.getElementById("body");
 
-    header.innerHTML = "";
-    body.innerHTML = "";
+    let row = document.createElement("tr");
 
-    if (data.length === 0) return;
+    row.innerHTML = `
+        <td>
+            <input type="text" class="search" oninput="searchProduct(this)">
+            <div class="dropdown"></div>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    `;
 
-    // tạo header
-    Object.keys(data[0]).forEach(k => {
-        let th = document.createElement("th");
-        th.innerText = k;
-        header.appendChild(th);
+    body.appendChild(row);
+}
+
+// search autocomplete theo tên sản phẩm
+function searchProduct(input) {
+    let val = input.value.toLowerCase();
+    let dropdown = input.nextElementSibling;
+
+    dropdown.innerHTML = "";
+
+    if (!val) return;
+
+    let matches = products.filter(p =>
+        (p["Tên sản phẩm"] || "").toLowerCase().includes(val)
+    ).slice(0, 5);
+
+    matches.forEach(item => {
+        let div = document.createElement("div");
+        div.innerText = `${item["Tên sản phẩm"]} - ${item["Vật liệu"]}`;
+
+        div.onclick = () => {
+            fillRow(input, item);
+            dropdown.innerHTML = "";
+        };
+
+        dropdown.appendChild(div);
     });
+}
 
-    // tạo rows
-    data.forEach(row => {
-        let tr = document.createElement("tr");
+// fill dữ liệu vào dòng
+function fillRow(input, item) {
+    let row = input.parentElement.parentElement;
 
-        Object.values(row).forEach(v => {
-            let td = document.createElement("td");
-            td.innerText = v;
-            tr.appendChild(td);
-        });
-
-        body.appendChild(tr);
-    });
+    row.children[0].querySelector("input").value = item["Tên sản phẩm"];
+    row.children[1].innerText = item["Mã SP"];
+    row.children[2].innerText = item["Vật liệu"];
+    row.children[3].innerText = item["ĐVT"];
+    row.children[4].innerText = item["Đơn giá"];
 }
