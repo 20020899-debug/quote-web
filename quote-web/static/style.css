@@ -1,49 +1,46 @@
 body {
     font-family: Arial;
-    background: #f5f6fa;
-    margin: 0;
-}
-
-.container {
-    width: 95%;
-    margin: auto;
-    padding: 20px;
-}
-
-h2 {
-    text-align: center;
-}
-
-.search-box {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-input {
-    flex: 1;
-    padding: 10px;
-}
-
-button {
-    padding: 10px 15px;
-    border: none;
-    background: #0d6efd;
-    color: white;
-    cursor: pointer;
+    background: #f5f5f5;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     background: white;
+    margin-top: 10px;
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 8px;
 }
 
-th {
-    background: #f0f0f0;
+input {
+    width: 100%;
+    padding: 6px;
+}
+
+button {
+    padding: 10px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    width: 200px;
+    z-index: 10;
+}
+
+.dropdown div {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.dropdown div:hover {
+    background: #eee;
 }
