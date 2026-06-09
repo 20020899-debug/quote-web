@@ -258,7 +258,33 @@ function calcRow(input) {
     const price =
         parseFloat(row.dataset.price) || 0;
 
-    const amount = qty * price;
+    const loai = row.dataset.loai || "";
+
+let amount = 0;
+
+if (loai === "LINEAR") {
+
+    // Mét
+    amount = qty * price;
+
+}
+else if (loai === "WEIGHT") {
+
+    // Kg
+    amount = qty * price;
+
+}
+else if (loai === "PIECE") {
+
+    // Chiếc
+    amount = qty * price;
+
+}
+else {
+
+    amount = qty * price;
+
+}
 
     row.querySelector(".amount").textContent =
         formatMoney(amount);
