@@ -244,8 +244,8 @@ tbody tr:hover{
 
 .cover img{
     width:80%;
-    max-width:100px;
-    height:50px;
+    max-width:200px;
+    height:130px;
     object-fit:cover;
     border-radius:10px;
 }
