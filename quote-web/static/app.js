@@ -238,6 +238,7 @@ function changeMaterial(select) {
         formatMoney(item.DonGia);
 
     row.dataset.price = item.DonGia;
+    row.dataset.loai = item.LoaiTinhGia;
 
     calcRow(
         row.querySelector("input[type='number']")
