@@ -17,6 +17,7 @@
         <button class="btn-add" onclick="addRow()">
             + Thêm dòng
         </button>
+        <button onclick="exportExcel()">📥 Xuất Excel</button>
     </div>
 
     <div class="table-wrapper">
@@ -122,6 +123,7 @@
     </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <script src="{{ url_for('static', filename='app.js') }}"></script>
 
