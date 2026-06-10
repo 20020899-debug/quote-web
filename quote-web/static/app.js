@@ -364,3 +364,25 @@ document.addEventListener("input", function(e){
     }
 
 });
+// =========================
+// EXPORT
+// =========================
+function exportExcel() {
+
+    let table = document.getElementById("quoteTable");
+
+    // clone bảng để không ảnh hưởng UI
+    let clone = table.cloneNode(true);
+
+    // xóa cột cuối (nút X)
+    clone.querySelectorAll("tr").forEach(tr => {
+        tr.lastElementChild?.remove();
+    });
+
+    let wb = XLSX.utils.book_new();
+    let ws = XLSX.utils.table_to_sheet(clone);
+
+    XLSX.utils.book_append_sheet(wb, ws, "BaoGia");
+
+    XLSX.writeFile(wb, "bao_gia.xlsx");
+}
