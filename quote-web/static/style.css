@@ -253,3 +253,11 @@ tbody tr:hover{
     background:#198754;
     color:#000000;
 }
+.system-title{
+    background:#198754;
+    color:white;
+    font-weight:bold;
+    text-align:center;
+    font-size:16px;
+    padding:10px;
+}
