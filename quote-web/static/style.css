@@ -261,31 +261,23 @@ tbody tr:hover{
     font-size:16px;
     padding:10px;
 }
-.spec,
-.origin{
+.multiline{
     width:100%;
     min-height:50px;
-    resize:vertical;
+
     border:none;
     outline:none;
+
     padding:6px;
+
     font-size:14px;
     font-family:Arial, sans-serif;
+
     background:transparent;
+
+    resize:vertical;
 }
 
-.spec:focus,
-.origin:focus{
+.multiline:focus{
     background:#f0fff4;
-}
-.product-search{
-    width:100%;
-    min-height:50px;
-    resize:vertical;
-    border:none;
-    outline:none;
-    padding:6px;
-    font-size:14px;
-    font-family:Arial, sans-serif;
-    background:transparent;
 }
