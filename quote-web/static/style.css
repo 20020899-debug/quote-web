@@ -72,51 +72,94 @@ button{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:1000px;
+    min-width:1700px;
     background:white;
+    table-layout:auto;
 }
 
+th,
+td{
+    border:1px solid #d8d8d8;
+    vertical-align:middle;
+    word-wrap:break-word;
+    overflow-wrap:break-word;
+}
+
+/* =========================
+   HEADER ROW
+========================= */
 thead th{
     background:#198754;
-    color:black;
+    color:#000;
     padding:10px;
-    border:1px solid #157347;
     text-align:center;
-    position:sticky;
-    top:0;
-    z-index:5;
+    font-weight:bold;
 }
 
+thead th small{
+    display:block;
+    margin-top:3px;
+    font-size:11px;
+    font-weight:normal;
+    color:#1f1f1f;
+}
+
+/* =========================
+   BODY
+========================= */
 tbody td{
-    border:1px solid #ddd;
     padding:4px;
-    height:42px;
+    min-height:40px;
 }
 
+tbody tr:hover{
+    background:#f0fff4;
+}
+
+/* =========================
+   FOOTER
+========================= */
 tfoot td{
-    border:1px solid #ddd;
     padding:10px;
     font-weight:bold;
     background:#f8f9fa;
+}
+
+.total-label{
+    text-align:right;
+    font-size:16px;
+}
+
+.total-value{
+    text-align:right;
+    color:#198754;
+    font-size:18px;
+    font-weight:bold;
 }
 
 /* =========================
    INPUT
 ========================= */
 input,
-select{
+select,
+textarea{
     width:100%;
-    height:32px;
     border:none;
     outline:none;
-    padding:0 8px;
     background:transparent;
+    padding:6px;
     font-size:14px;
 }
 
 input:focus,
-select:focus{
+select:focus,
+textarea:focus{
     background:#f0fff4;
+}
+
+textarea{
+    resize:vertical;
+    min-height:45px;
 }
 
 /* =========================
@@ -131,14 +174,9 @@ select:focus{
    PRICE
 ========================= */
 .price,
-.amount,
-.total-value{
+.amount{
     text-align:right;
     font-weight:bold;
-}
-
-.total-label{
-    text-align:right;
 }
 
 /* =========================
@@ -190,22 +228,51 @@ td button:hover{
 }
 
 /* =========================
-   ROW HOVER
+   SYSTEM TITLE
 ========================= */
-tbody tr:hover{
-    background:#f8fff9;
+.system-title{
+    background:#198754;
+    color:#000;
+    text-align:center;
+    font-size:16px;
+    font-weight:bold;
+    padding:12px;
+}
+
+/* =========================
+   SYSTEM INPUT
+========================= */
+.system-input{
+    width:100%;
+    height:50px;
+
+    background:#198754;
+    color:#000;
+
+    text-align:center;
+
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:1px;
+
+    border:none;
+    outline:none;
+}
+
+.system-input::placeholder{
+    color:#1f1f1f;
 }
 
 /* =========================
    SCROLLBAR
 ========================= */
 ::-webkit-scrollbar{
-    height:10px;
     width:10px;
+    height:10px;
 }
 
 ::-webkit-scrollbar-thumb{
-    background:#b8b8b8;
+    background:#bdbdbd;
     border-radius:10px;
 }
 
@@ -235,29 +302,4 @@ tbody tr:hover{
     .btn-add{
         width:100%;
     }
-}
-.system-input{
-    width:100%;
-    height:45px;
-
-    border:none;
-    outline:none;
-
-    text-align:center;      /* căn giữa ngang */
-    vertical-align:middle;
-
-    font-size:18px;
-    font-weight:bold;
-    letter-spacing:1px;
-
-    background:#198754;
-    color:white;
-}
-.system-title{
-    background:#198754;
-    color:#000000;
-    font-weight:bold;
-    text-align:center;
-    font-size:16px;
-    padding:10px;
 }
