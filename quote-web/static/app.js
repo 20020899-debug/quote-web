@@ -66,11 +66,10 @@ function addRow() {
         </td>
 
         <td>
-            <input
-                type="text"
-                class="spec"
-                placeholder="Đặc tính kỹ thuật"
-            >
+            <textarea
+    class="spec"
+    placeholder="Đặc tính kỹ thuật">
+</textarea>
         </td>
 
         <td>
@@ -90,11 +89,10 @@ function addRow() {
         <td class="amount">0</td>
 
         <td>
-    <input
-        type="text"
-        class="origin"
-        placeholder="Xuất xứ/Ghi chú"
-    >
+    <textarea
+    class="origin"
+    placeholder="Xuất xứ/Ghi chú">
+</textarea>
    </td>
 
         <td>
