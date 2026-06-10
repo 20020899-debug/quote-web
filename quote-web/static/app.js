@@ -220,7 +220,6 @@ function changeMaterial(select) {
     const row = select.closest("tr");
 
     const ma = row.dataset.ma;
-
     const vatLieu = select.value;
 
     const item = data.find(x =>
@@ -229,6 +228,8 @@ function changeMaterial(select) {
     );
 
     if (!item) {
+
+        row.querySelector(".spec").value = "";
 
         row.querySelector(".unit").textContent = "";
 
@@ -243,20 +244,27 @@ function changeMaterial(select) {
         return;
     }
 
+    // ===== ĐẶC TÍNH KỸ THUẬT =====
+
+    row.querySelector(".spec").value =
+        item.DacTinh || "";
+
+    // ===== ĐƠN VỊ =====
+
     row.querySelector(".unit").textContent =
-        item.DonVi;
+        item.DonVi || "";
+
+    // ===== ĐƠN GIÁ =====
 
     row.querySelector(".price").textContent =
         formatMoney(item.DonGia);
 
     row.dataset.price = item.DonGia;
-    row.dataset.loai = item.LoaiTinhGia;
 
     calcRow(
         row.querySelector("input[type='number']")
     );
 }
-
 // =========================
 // TÍNH THÀNH TIỀN
 // =========================
