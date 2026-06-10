@@ -281,3 +281,11 @@ tbody tr:hover{
 .multiline:focus{
     background:#f0fff4;
 }
+/* =========================
+   căn giữa 
+========================= */
+th,
+td{
+    text-align: center;
+    vertical-align: middle;
+}
