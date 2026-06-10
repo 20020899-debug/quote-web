@@ -284,7 +284,12 @@ tbody tr:hover{
 /* =========================
    căn giữa 
 ========================= */
-th,
+th{
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
 td{
     text-align: center;
     vertical-align: middle;
