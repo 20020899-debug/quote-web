@@ -278,3 +278,14 @@ tbody tr:hover{
 .origin:focus{
     background:#f0fff4;
 }
+.product-search{
+    width:100%;
+    min-height:50px;
+    resize:vertical;
+    border:none;
+    outline:none;
+    padding:6px;
+    font-size:14px;
+    font-family:Arial, sans-serif;
+    background:transparent;
+}
