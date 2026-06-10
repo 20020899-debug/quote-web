@@ -49,7 +49,7 @@ function addRow() {
 
         <td style="position:relative;">
            <textarea
-    class="product-search"
+    class="multiline product-search"
     placeholder="Tìm sản phẩm..."
     oninput="searchProduct(this)">
 </textarea>
@@ -66,7 +66,7 @@ function addRow() {
 
         <td>
             <textarea
-    class="spec"
+    class="multiline spec"
     placeholder="Đặc tính kỹ thuật">
 </textarea>
         </td>
@@ -89,7 +89,7 @@ function addRow() {
 
         <td>
     <textarea
-    class="origin"
+    class="multiline origin"
     placeholder="Xuất xứ/Ghi chú">
 </textarea>
    </td>
@@ -356,21 +356,7 @@ window.onload = async function () {
 document.addEventListener("input", function(e){
 
     if(
-        e.target.classList.contains("spec") ||
-        e.target.classList.contains("origin")
-    ){
-        e.target.style.height = "auto";
-        e.target.style.height =
-            e.target.scrollHeight + "px";
-    }
-
-});
-document.addEventListener("input", function(e){
-
-    if(
-        e.target.classList.contains("spec") ||
-        e.target.classList.contains("origin") ||
-        e.target.classList.contains("product-search")
+    e.target.classList.contains("multiline")
     ){
         e.target.style.height = "auto";
         e.target.style.height =
