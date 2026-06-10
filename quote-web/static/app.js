@@ -89,12 +89,12 @@ function addRow() {
         <td class="amount">0</td>
 
         <td>
-            <input
-                type="text"
-                class="note"
-                placeholder="Xuất xứ / Ghi chú"
-            >
-        </td>
+    <input
+        type="text"
+        class="origin"
+        placeholder="Xuất xứ/Ghi chú"
+    >
+   </td>
 
         <td>
             <button onclick="deleteRow(this)">X</button>
