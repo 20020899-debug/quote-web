@@ -48,12 +48,11 @@ function addRow() {
         <td class="stt"></td>
 
         <td style="position:relative;">
-            <input
-                type="text"
-                class="product-search"
-                placeholder="Tìm sản phẩm..."
-                oninput="searchProduct(this)"
-            >
+           <textarea
+    class="product-search"
+    placeholder="Tìm sản phẩm..."
+    oninput="searchProduct(this)">
+</textarea>
 
             <div class="dropdown"></div>
         </td>
