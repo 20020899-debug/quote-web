@@ -351,3 +351,18 @@ window.onload = async function () {
 
     addRow();
 };
+// =========================
+// Ô tự động cao lên khi số dòng tăng
+// =========================
+document.addEventListener("input", function(e){
+
+    if(
+        e.target.classList.contains("spec") ||
+        e.target.classList.contains("origin")
+    ){
+        e.target.style.height = "auto";
+        e.target.style.height =
+            e.target.scrollHeight + "px";
+    }
+
+});
