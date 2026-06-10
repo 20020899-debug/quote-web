@@ -62,14 +62,15 @@ def data():
             dongia = 0
 
         records.append({
-            "MaSP": str(row["MaSP"]).strip(),
-            "TenSP": str(row["TenSP"]).strip(),
-            "VatLieu": str(row["VatLieu"]).strip(),
-            "DonVi": str(row["DonVi"]).strip(),
-            "DonGia": dongia,
-            "LoaiTinhGia": str(row["LoaiTinhGia"]).strip()
-        })
-
+    "MaSP": str(row["MaSP"]).strip(),
+    "TenSP": str(row["TenSP"]).strip(),
+    "VatLieu": str(row["VatLieu"]).strip(),
+    "DonVi": str(row["DonVi"]).strip(),
+    "DonGia": dongia,
+    "LoaiTinhGia": str(row["LoaiTinhGia"]).strip(),
+    "DacTinh": str(row["DacTinh"]).strip(),
+    "XuatXu": str(row["XuatXu"]).strip()
+})
     return jsonify(records)
 
 # =========================
