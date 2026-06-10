@@ -249,9 +249,8 @@ function changeMaterial(select) {
     row.querySelector(".spec").value =
         item.DacTinh || "";
     // ===== XUẤT XỨ/ GHI CHÚ =====
-    row.querySelector(".note").value =
+   row.querySelector(".origin").value =
     item.XuatXu || "";
-
     // ===== ĐƠN VỊ =====
 
     row.querySelector(".unit").textContent =
