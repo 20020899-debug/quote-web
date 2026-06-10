@@ -367,48 +367,158 @@ document.addEventListener("input", function(e){
 // =========================
 // EXPORT
 // =========================
-function exportExcel() {
+async function exportExcel() {
 
-    let table = document.getElementById("quoteTable");
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet("BaoGia");
 
-    // clone bảng để không phá UI
-    let clone = table.cloneNode(true);
+    // Tiêu đề
+    sheet.mergeCells("A1:I1");
 
-    // =========================
-    // 1. Chuyển input -> text
-    // =========================
-    clone.querySelectorAll("input, textarea, select").forEach(el => {
+    const titleCell = sheet.getCell("A1");
 
-        let value = "";
+    titleCell.value =
+        document.querySelector(".system-input").value ||
+        "BÁO GIÁ";
 
-        if (el.tagName === "SELECT") {
-            value = el.options[el.selectedIndex]?.text || "";
-        } else {
-            value = el.value;
-        }
+    titleCell.font = {
+        bold: true,
+        size: 16
+    };
 
-        let td = el.parentElement;
-        td.innerText = value;
+    titleCell.alignment = {
+        horizontal: "center",
+        vertical: "middle"
+    };
+
+    // Header
+    const headers = [
+        "STT",
+        "Tên Sản Phẩm",
+        "Vật liệu",
+        "Đặc tính kỹ thuật",
+        "Số lượng",
+        "Đơn vị",
+        "Đơn giá",
+        "Thành tiền",
+        "Xuất xứ/Ghi chú"
+    ];
+
+    const headerRow = sheet.addRow(headers);
+
+    headerRow.eachCell(cell => {
+
+        cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "198754" }
+        };
+
+        cell.font = {
+            bold: true,
+            color: { argb: "000000" }
+        };
+
+        cell.alignment = {
+            horizontal: "center",
+            vertical: "middle",
+            wrapText: true
+        };
+
+        cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" }
+        };
     });
 
-    // =========================
-    // 2. Xoá cột nút X
-    // =========================
-    clone.querySelectorAll("tr").forEach(tr => {
-        if (tr.children.length > 0) {
-            tr.lastElementChild?.remove();
-        }
+    // Dữ liệu
+    document.querySelectorAll("#body tr")
+        .forEach(row => {
+
+            const cells = row.children;
+
+            sheet.addRow([
+                cells[0].innerText,
+                cells[1].querySelector(".product-search")?.value || "",
+                cells[2].querySelector("select")?.value || "",
+                cells[3].querySelector(".spec")?.value || "",
+                cells[4].querySelector("input[type='number']")?.value || "",
+                cells[5].innerText,
+                cells[6].innerText,
+                cells[7].innerText,
+                cells[8].querySelector(".origin")?.value || ""
+            ]);
+        });
+
+    // Format toàn bộ bảng
+    sheet.eachRow((row, rowNumber) => {
+
+        if (rowNumber <= 2) return;
+
+        row.eachCell(cell => {
+
+            cell.alignment = {
+                horizontal: "center",
+                vertical: "middle",
+                wrapText: true
+            };
+
+            cell.border = {
+                top: { style: "thin" },
+                left: { style: "thin" },
+                bottom: { style: "thin" },
+                right: { style: "thin" }
+            };
+        });
     });
 
-    // =========================
-    // 3. Export Excel
-    // =========================
-    let wb = XLSX.utils.book_new();
-    let ws = XLSX.utils.table_to_sheet(clone, {
-        raw: true
+    // Độ rộng cột
+    sheet.columns = [
+        { width: 8 },
+        { width: 35 },
+        { width: 18 },
+        { width: 40 },
+        { width: 12 },
+        { width: 12 },
+        { width: 18 },
+        { width: 18 },
+        { width: 25 }
+    ];
+
+    // Tổng cộng
+    const total =
+        document.getElementById("total").innerText;
+
+    const totalRow = sheet.addRow([
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "TỔNG CỘNG",
+        total
+    ]);
+
+    totalRow.eachCell(cell => {
+
+        cell.font = { bold: true };
+
+        cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" }
+        };
     });
 
-    XLSX.utils.book_append_sheet(wb, ws, "BaoGia");
+    const buffer =
+        await workbook.xlsx.writeBuffer();
 
-    XLSX.writeFile(wb, "bao_gia.xlsx");
+    saveAs(
+        new Blob([buffer]),
+        "BaoGia.xlsx"
+    );
 }
