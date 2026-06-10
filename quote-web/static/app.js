@@ -44,6 +44,7 @@ function addRow() {
     tr.dataset.price = 0;
 
     tr.innerHTML = `
+
         <td class="stt"></td>
 
         <td style="position:relative;">
@@ -51,7 +52,6 @@ function addRow() {
                 type="text"
                 class="product-search"
                 placeholder="Tìm sản phẩm..."
-                autocomplete="off"
                 oninput="searchProduct(this)"
             >
 
@@ -59,17 +59,18 @@ function addRow() {
         </td>
 
         <td>
-            <select
-                class="material-select"
-                onchange="changeMaterial(this)"
-            >
+            <select onchange="changeMaterial(this)">
                 <option value="">-- Chọn --</option>
             </select>
         </td>
 
-        <td class="unit"></td>
-
-        <td class="price">0</td>
+        <td>
+            <input
+                type="text"
+                class="spec"
+                placeholder="Đặc tính kỹ thuật"
+            >
+        </td>
 
         <td>
             <input
@@ -81,13 +82,24 @@ function addRow() {
             >
         </td>
 
+        <td class="unit"></td>
+
+        <td class="price">0</td>
+
         <td class="amount">0</td>
 
         <td>
-            <button onclick="deleteRow(this)">
-                ✖
-            </button>
+            <input
+                type="text"
+                class="note"
+                placeholder="Xuất xứ / Ghi chú"
+            >
         </td>
+
+        <td>
+            <button onclick="deleteRow(this)">X</button>
+        </td>
+
     `;
 
     tbody.appendChild(tr);
