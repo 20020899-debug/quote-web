@@ -59,7 +59,8 @@ function addRow() {
         </td>
 
         <td>
-            <select onchange="changeMaterial(this)">
+            <select class="material-select"
+                    onchange="changeMaterial(this)">
                 <option value="">-- Chọn --</option>
             </select>
         </td>
