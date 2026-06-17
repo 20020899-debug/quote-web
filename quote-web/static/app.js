@@ -137,14 +137,7 @@ function searchProduct(input) {
 
     if (
         item.TenSP &&
-        const words = keyword.split(" ");
-
-if (
-    item.TenSP &&
-    words.every(w =>
-        item.TenSP.toLowerCase().includes(w)
-    )
-)
+        item.TenSP.toLowerCase().includes(keyword)
     ) {
 
         if (!products.some(p => p.TenSP === item.TenSP)) {
