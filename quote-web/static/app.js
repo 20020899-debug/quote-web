@@ -98,6 +98,8 @@ function searchProduct(input) {
 
     const kw = removeVietnameseTones(input.value.toLowerCase().trim());
     const dd = input.nextElementSibling;
+    boldMap.delete(input);
+    input.style.fontWeight = "normal";
 
     dd.innerHTML = "";
     if (!kw) return dd.style.display = "none";
