@@ -41,84 +41,62 @@ function addRow() {
     const tr = document.createElement("tr");
     tr.dataset.price = 0;
 
-    // STT
-    const td0 = document.createElement("td");
-    td0.className = "stt";
+    tr.innerHTML = `
 
-    // SEARCH
-    const td1 = document.createElement("td");
-    td1.style.position = "relative";
+        <td class="stt"></td>
 
-    const search = document.createElement("div");
-    search.className = "multiline product-search";
-    search.contentEditable = true;
-    search.oninput = () => searchProduct(search);
+        <td style="position:relative;">
+           <textarea
+    class="multiline product-search"
+    placeholder="Tìm sản phẩm..."
+    oninput="searchProduct(this)">
+</textarea>
 
-    const dropdown = document.createElement("div");
-    dropdown.className = "dropdown";
+            <div class="dropdown"></div>
+        </td>
 
-    td1.append(search, dropdown);
+        <td>
+            <select class="material-select"
+                    onchange="changeMaterial(this)">
+                <option value="">-- Chọn --</option>
+            </select>
+        </td>
 
-    // MATERIAL
-    const td2 = document.createElement("td");
+        <td>
+            <textarea
+    class="multiline spec"
+    placeholder="Đặc tính kỹ thuật">
+</textarea>
+        </td>
 
-    const select = document.createElement("select");
-    select.className = "material-select";
-    select.onchange = () => changeMaterial(select);
+        <td>
+            <input
+                type="number"
+                value="1"
+                min="0"
+                step="0.01"
+                oninput="calcRow(this)"
+            >
+        </td>
 
-    select.innerHTML = `<option value="">-- Chọn --</option>`;
-    td2.appendChild(select);
+        <td class="unit"></td>
 
-    // SPEC
-    const td3 = document.createElement("td");
+        <td class="price">0</td>
 
-    const spec = document.createElement("div");
-    spec.className = "multiline spec";
-    spec.contentEditable = true;
+        <td class="amount">0</td>
 
-    td3.appendChild(spec);
+        <td>
+    <textarea
+    class="multiline origin"
+    placeholder="Xuất xứ/Ghi chú">
+</textarea>
+   </td>
 
-    // QTY
-    const td4 = document.createElement("td");
+        <td>
+            <button onclick="deleteRow(this)">X</button>
+        </td>
 
-    const qty = document.createElement("input");
-    qty.type = "number";
-    qty.innerText = 1;
-    qty.oninput = () => calcRow(qty);
-
-    td4.appendChild(qty);
-
-    // UNIT
-    const td5 = document.createElement("td");
-    td5.className = "unit";
-
-    // PRICE
-    const td6 = document.createElement("td");
-    td6.className = "price";
-
-    // AMOUNT
-    const td7 = document.createElement("td");
-    td7.className = "amount";
-
-    // ORIGIN
-    const td8 = document.createElement("td");
-
-    const origin = document.createElement("div");
-    origin.className = "multiline origin";
-    origin.contentEditable = true;
-
-    td8.appendChild(origin);
-
-    // DELETE
-    const td9 = document.createElement("td");
-
-    const del = document.createElement("button");
-    del.innerText = "X";
-    del.onclick = () => deleteRow(del);
-
-    td9.appendChild(del);
-
-    tr.append(td0, td1, td2, td3, td4, td5, td6, td7, td8, td9);
+    `;
 
     tbody.appendChild(tr);
 
@@ -142,9 +120,10 @@ function deleteRow(btn) {
 // =========================
 function searchProduct(input) {
 
-    const keyword = removeVietnameseTones(
-    input.innerText.trim().toLowerCase()
-);
+    const keyword =
+    removeVietnameseTones(
+        input.value.trim().toLowerCase()
+    );
 
     const dropdown = input.nextElementSibling;
 
@@ -221,7 +200,7 @@ function selectProduct(input, product) {
 
     const row = input.closest("tr");
 
-    input.innerText = product.TenSP;
+    input.value = product.TenSP;
 
     const dropdown = input.nextElementSibling;
     dropdown.innerHTML = "";
@@ -246,7 +225,7 @@ function selectProduct(input, product) {
         const option =
             document.createElement("option");
 
-        option.innerText = vl;
+        option.value = vl;
         option.textContent = vl;
 
         materialSelect.appendChild(option);
@@ -263,8 +242,8 @@ function changeMaterial(select) {
     const row = select.closest("tr");
 
     const tenSP =
-    row.querySelector(".product-search").innerText;
-    const vatLieu = select.innerText;
+    row.querySelector(".product-search").value;
+    const vatLieu = select.value;
 
     const item = data.find(x =>
         x.TenSP === tenSP &&
@@ -273,7 +252,7 @@ function changeMaterial(select) {
 
     if (!item) {
 
-        row.querySelector(".spec").innerText = "";
+        row.querySelector(".spec").value = "";
 
         row.querySelector(".unit").textContent = "";
 
@@ -290,10 +269,10 @@ function changeMaterial(select) {
 
     // ===== ĐẶC TÍNH KỸ THUẬT =====
 
-    row.querySelector(".spec").innerText =
+    row.querySelector(".spec").value =
         item.DacTinh || "";
     // ===== XUẤT XỨ/ GHI CHÚ =====
-   row.querySelector(".origin").innerText =
+   row.querySelector(".origin").value =
     item.XuatXu || "";
     // ===== ĐƠN VỊ =====
 
@@ -396,8 +375,8 @@ async function exportExcel() {
 
     const titleCell = sheet.getCell("A1");
 
-    titleCell.innerText =
-        document.querySelector(".system-input").innerText ||
+    titleCell.value =
+        document.querySelector(".system-input").value ||
         "BÁO GIÁ";
 
     titleCell.font = {
@@ -460,14 +439,14 @@ async function exportExcel() {
 
             sheet.addRow([
                 cells[0].innerText,
-                cells[1].querySelector(".product-search")?.innerText || "",
-                cells[2].querySelector("select")?.innerText || "",
-                cells[3].querySelector(".spec")?.innerText || "",
-                cells[4].querySelector("input[type='number']")?.innerText || "",
+                cells[1].querySelector(".product-search")?.value || "",
+                cells[2].querySelector("select")?.value || "",
+                cells[3].querySelector(".spec")?.value || "",
+                cells[4].querySelector("input[type='number']")?.value || "",
                 cells[5].innerText,
                 cells[6].innerText,
                 cells[7].innerText,
-                cells[8].querySelector(".origin")?.innerText || ""
+                cells[8].querySelector(".origin")?.value || ""
             ]);
         });
 
@@ -498,7 +477,7 @@ async function exportExcel() {
     });
 
     // Cột G = Đơn giá
-    if (row.getCell(7).innerText) {
+    if (row.getCell(7).value) {
         row.getCell(7).font = {
             name: "Times New Roman",
             size: 12.5,
@@ -512,7 +491,7 @@ async function exportExcel() {
     }
 
     // Cột H = Thành tiền
-    if (row.getCell(8).innerText) {
+    if (row.getCell(8).value) {
         row.getCell(8).font = {
             name: "Times New Roman",
             size: 12.5,
@@ -584,45 +563,4 @@ function removeVietnameseTones(str) {
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/đ/g, "d")
         .replace(/Đ/g, "D");
-}
-// =========================
-// Nút bôi đậm
-// =========================
-function makeBold() {
-    document.execCommand("bold");
-}
-const btn = document.createElement("button");
-btn.innerText = "B";
-btn.onclick = makeBold;
-document.body.prepend(btn); 
-function toExcelRich(cell) {
-
-    const div = document.createElement("div");
-    div.innerHTML = cell.innerHTML || "";
-
-    const result = [];
-
-    div.childNodes.forEach(node => {
-
-        if (node.nodeType === 3) {
-            result.push({
-                text: node.textContent,
-                font: { bold: false }
-            });
-        }
-
-        if (node.nodeType === 1) {
-
-            const bold =
-                node.tagName === "B" ||
-                node.tagName === "STRONG";
-
-            result.push({
-                text: node.textContent,
-                font: { bold }
-            });
-        }
-    });
-
-    return { richText: result };
 }
