@@ -163,7 +163,9 @@ function selectProduct(input, p) {
 function changeMaterial(sel) {
 
     const row = sel.closest("tr");
-    const name = $(".product-search", row).value;
+
+    const name = $(".product-search", row).value
+        .replace(/<[^>]*>/g, "");   // ⭐ FIX QUAN TRỌNG
 
     const item = data.find(x =>
         x.TenSP === name && x.VatLieu === sel.value
