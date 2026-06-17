@@ -453,7 +453,7 @@ async function exportExcel() {
         });
 
     // Format toàn bộ bảng
-   sheet.eachRow((row, rowNumber) => {
+  sheet.eachRow((row, rowNumber) => {
 
     if (rowNumber <= 2) return;
 
@@ -477,6 +477,35 @@ async function exportExcel() {
             right: { style: "thin" }
         };
     });
+
+    // Cột G = Đơn giá
+    if (row.getCell(7).value) {
+        row.getCell(7).font = {
+            name: "Times New Roman",
+            size: 12.5,
+            bold: true
+        };
+
+        row.getCell(7).alignment = {
+            horizontal: "right",
+            vertical: "middle"
+        };
+    }
+
+    // Cột H = Thành tiền
+    if (row.getCell(8).value) {
+        row.getCell(8).font = {
+            name: "Times New Roman",
+            size: 12.5,
+            bold: true
+        };
+
+        row.getCell(8).alignment = {
+            horizontal: "right",
+            vertical: "middle"
+        };
+    }
+
 });
     // Độ rộng cột
     sheet.columns = [
