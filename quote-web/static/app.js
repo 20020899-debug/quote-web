@@ -1,5 +1,5 @@
 let data = [];
-
+const boldMap = new WeakMap();
 // =========================
 // LOAD DATA
 // =========================
@@ -222,4 +222,44 @@ function removeVietnameseTones(s) {
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/đ/g, "d")
         .replace(/Đ/g, "D");
+}
+// =========================
+// BÔI ĐEN
+// =========================
+const btn = document.createElement("button");
+btn.innerText = "B";
+btn.style.position = "fixed";
+btn.style.top = "10px";
+btn.style.left = "10px";
+btn.onclick = toggleBold;
+
+document.body.appendChild(btn);
+function toggleBold() {
+
+    const input = document.activeElement;
+
+    if (!input || !input.classList.contains("product-search")) return;
+
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+
+    if (start === end) return;
+
+    const ranges = boldMap.get(input) || [];
+
+    ranges.push({ start, end });
+
+    boldMap.set(input, ranges);
+
+    renderBold(input);
+}
+function renderBold(input) {
+
+    const ranges = boldMap.get(input) || [];
+
+    if (ranges.length > 0) {
+        input.style.fontWeight = "bold";
+    } else {
+        input.style.fontWeight = "normal";
+    }
 }
