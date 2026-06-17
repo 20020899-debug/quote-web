@@ -154,10 +154,9 @@ function searchProduct(input) {
 
         div.className = "dropdown-item";
 
-        div.innerHTML = `
-            <b>${item.MaSP}</b><br>
-            ${item.TenSP}
-        `;
+       div.innerHTML = `
+    <b>${item.TenSP}</b>
+`;
 
         div.onclick = () => {
             selectProduct(input, item);
