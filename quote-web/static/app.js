@@ -373,13 +373,14 @@ async function exportExcel() {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet("BaoGia");
 
-    // Tiêu đề
+    // =========================
+    // TIÊU ĐỀ
+    // =========================
     sheet.mergeCells("A1:I1");
 
     const titleCell = sheet.getCell("A1");
-
     titleCell.value =
-        document.querySelector(".system-input").value ||
+        document.querySelector(".system-input")?.innerText ||
         "BÁO GIÁ";
 
     titleCell.font = {
@@ -392,7 +393,9 @@ async function exportExcel() {
         vertical: "middle"
     };
 
-    // Header
+    // =========================
+    // HEADER
+    // =========================
     const headers = [
         "STT",
         "Tên Sản Phẩm",
@@ -408,7 +411,6 @@ async function exportExcel() {
     const headerRow = sheet.addRow(headers);
 
     headerRow.eachCell(cell => {
-
         cell.fill = {
             type: "pattern",
             pattern: "solid",
@@ -434,81 +436,95 @@ async function exportExcel() {
         };
     });
 
-    // Dữ liệu
-    document.querySelectorAll("#body tr")
-        .forEach(row => {
+    // =========================
+    // DATA ROWS
+    // =========================
+    document.querySelectorAll("#body tr").forEach(row => {
 
-            const cells = row.children;
+        const cells = row.children;
 
-            sheet.addRow([
-                cells[0].innerText,
-                cells[1].querySelector(".product-search")?.value || "",
-                cells[2].querySelector("select")?.value || "",
-                cells[3].querySelector(".spec")?.value || "",
-                cells[4].querySelector("input[type='number']")?.value || "",
-                cells[5].innerText,
-                cells[6].innerText,
-                cells[7].innerText,
-                cells[8].querySelector(".origin")?.value || ""
-            ]);
-        });
+        sheet.addRow([
+            cells[0].innerText,
 
-    // Format toàn bộ bảng
-    sheet.eachRow((row, rowNumber) => {
+            toExcelRich(cells[1]),
 
-    if (rowNumber <= 2) return;
+            cells[2].querySelector("select")?.value || "",
 
-    row.eachCell(cell => {
+            toExcelRich(cells[3]),
 
-        cell.font = {
-            name: "Arial",
-            size: 12.5
-        };
+            cells[4].querySelector("input")?.value || "",
 
-        cell.alignment = {
-            horizontal: "center",
-            vertical: "middle",
-            wrapText: true
-        };
+            cells[5].innerText,
 
-        cell.border = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" }
-        };
+            cells[6].innerText,
+
+            cells[7].innerText,
+
+            toExcelRich(cells[8])
+        ]);
     });
 
-    // Cột G = Đơn giá
-    if (row.getCell(7).value) {
-        row.getCell(7).font = {
-            name: "Times New Roman",
-            size: 12.5,
-            bold: true
-        };
+    // =========================
+    // FORMAT BẢNG
+    // =========================
+    sheet.eachRow((row, rowNumber) => {
 
-        row.getCell(7).alignment = {
-            horizontal: "right",
-            vertical: "middle"
-        };
-    }
+        if (rowNumber <= 2) return;
 
-    // Cột H = Thành tiền
-    if (row.getCell(8).value) {
-        row.getCell(8).font = {
-            name: "Times New Roman",
-            size: 12.5,
-            bold: true
-        };
+        row.eachCell(cell => {
+            cell.font = {
+                name: "Arial",
+                size: 12.5
+            };
 
-        row.getCell(8).alignment = {
-            horizontal: "right",
-            vertical: "middle"
-        };
-    }
+            cell.alignment = {
+                horizontal: "center",
+                vertical: "middle",
+                wrapText: true
+            };
 
-});
-    // Độ rộng cột
+            cell.border = {
+                top: { style: "thin" },
+                left: { style: "thin" },
+                bottom: { style: "thin" },
+                right: { style: "thin" }
+            };
+        });
+
+        // Đơn giá (cột 7)
+        const priceCell = row.getCell(7);
+        if (priceCell.value) {
+            priceCell.font = {
+                name: "Times New Roman",
+                size: 12.5,
+                bold: true
+            };
+
+            priceCell.alignment = {
+                horizontal: "right",
+                vertical: "middle"
+            };
+        }
+
+        // Thành tiền (cột 8)
+        const amountCell = row.getCell(8);
+        if (amountCell.value) {
+            amountCell.font = {
+                name: "Times New Roman",
+                size: 12.5,
+                bold: true
+            };
+
+            amountCell.alignment = {
+                horizontal: "right",
+                vertical: "middle"
+            };
+        }
+    });
+
+    // =========================
+    // ĐỘ RỘNG CỘT
+    // =========================
     sheet.columns = [
         { width: 8 },
         { width: 35 },
@@ -521,9 +537,10 @@ async function exportExcel() {
         { width: 25 }
     ];
 
-    // Tổng cộng
-    const total =
-        document.getElementById("total").innerText;
+    // =========================
+    // TỔNG CỘNG
+    // =========================
+    const total = document.getElementById("total")?.innerText || "0";
 
     const totalRow = sheet.addRow([
         "",
@@ -537,7 +554,6 @@ async function exportExcel() {
     ]);
 
     totalRow.eachCell(cell => {
-
         cell.font = { bold: true };
 
         cell.border = {
@@ -548,8 +564,10 @@ async function exportExcel() {
         };
     });
 
-    const buffer =
-        await workbook.xlsx.writeBuffer();
+    // =========================
+    // EXPORT FILE
+    // =========================
+    const buffer = await workbook.xlsx.writeBuffer();
 
     saveAs(
         new Blob([buffer]),
