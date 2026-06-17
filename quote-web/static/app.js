@@ -478,30 +478,33 @@ async function exportExcel() {
         };
     });
 
-   // Đơn giá
-row.getCell(7).font = {
-    name: "Times New Roman",
-    size: 12.5,
-    bold: true
-};
+   // Cột G = Đơn giá
+if (row.getCell(7).value) {
+    row.getCell(7).font = {
+        name: "Times New Roman",
+        size: 12.5,
+        bold: true
+    };
 
-row.getCell(7).alignment = {
-    horizontal: "right",
-    vertical: "middle",
-    wrapText: true
-};
+    row.getCell(7).alignment = {
+        horizontal: "right",
+        vertical: "middle"
+    };
+}
 
-// Thành tiền
-row.getCell(8).font = {
-    name: "Times New Roman",
-    size: 12.5,
-    bold: true
-};
+// Cột H = Thành tiền
+if (row.getCell(8).value) {
+    row.getCell(8).font = {
+        name: "Times New Roman",
+        size: 12.5,
+        bold: true
+    };
 
-row.getCell(8).alignment = {
-    horizontal: "right",
-    vertical: "middle",
-    wrapText: true
+    row.getCell(8).alignment = {
+        horizontal: "right",
+        vertical: "middle"
+    };
+}
 };
     // Độ rộng cột
     sheet.columns = [
