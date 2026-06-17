@@ -146,7 +146,7 @@ function searchProduct(input) {
     }
 });
 
-    products.slice(0, 10).forEach(item => {
+   products.forEach(item => {
 
         const div = document.createElement("div");
 
