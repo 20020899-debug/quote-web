@@ -347,7 +347,7 @@ function calcTotal() {
                 parseFloat(
                     row.querySelector(
                         "input[type='number']"
-                    ).innerText
+                    ).value
                 ) || 0;
 
             const price =
