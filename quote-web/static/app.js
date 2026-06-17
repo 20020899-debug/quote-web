@@ -98,8 +98,6 @@ function searchProduct(input) {
 
     const kw = removeVietnameseTones(input.value.toLowerCase().trim());
     const dd = input.nextElementSibling;
-    boldMap.delete(input);
-    input.style.fontWeight = "normal";
 
     dd.innerHTML = "";
     if (!kw) return dd.style.display = "none";
@@ -117,14 +115,16 @@ function searchProduct(input) {
     unique.forEach(item => {
         const div = document.createElement("div");
         div.className = "dropdown-item";
-        div.innerHTML = `<b>${item.TenSP.split("\n")[0]}</b>`;
+
+        div.innerText = item.TenSP.split("\n")[0]; // FIX nhẹ
+
         div.onclick = () => selectProduct(input, item);
+
         dd.appendChild(div);
     });
 
     dd.style.display = unique.length ? "block" : "none";
 }
-
 // =========================
 // SELECT PRODUCT
 // =========================
