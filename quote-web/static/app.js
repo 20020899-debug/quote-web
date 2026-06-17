@@ -223,3 +223,35 @@ function removeVietnameseTones(s) {
         .replace(/đ/g, "d")
         .replace(/Đ/g, "D");
 }
+// =========================
+// BÔI đậm
+// =========================
+document.addEventListener("keydown", function (e) {
+
+    if (!(e.ctrlKey && e.key.toLowerCase() === "b")) return;
+
+    const el = document.activeElement;
+
+    if (!el || !el.classList.contains("product-search")) return;
+
+    e.preventDefault();
+
+    toggleBoldTextarea(el);
+});
+function toggleBoldTextarea(input) {
+
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+
+    if (start === end) return;
+
+    const text = input.value;
+    const selected = text.substring(start, end);
+
+    const wrapped = `<b>${selected}</b>`;
+
+    input.value =
+        text.substring(0, start) +
+        wrapped +
+        text.substring(end);
+}
