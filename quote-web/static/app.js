@@ -257,9 +257,15 @@ function toggleBoldTextarea(input) {
     if (start === end) return;
 
     const text = input.value;
+
     const selected = text.substring(start, end);
 
-    const wrapped = `<b>${selected}</b>`;
+    // ⭐ tránh lồng <b>
+    const clean = selected
+        .replace(/<b>/g, "")
+        .replace(/<\/b>/g, "");
+
+    const wrapped = `<b>${clean}</b>`;
 
     input.value =
         text.substring(0, start) +
