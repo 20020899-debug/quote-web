@@ -125,7 +125,7 @@ function searchProduct(input) {
 
     const keyword =
     removeVietnameseTones(
-        input.value.trim().toLowerCase()
+        input.innerText.trim().toLowerCase()
     );
 
     const dropdown = input.nextElementSibling;
@@ -203,7 +203,7 @@ function selectProduct(input, product) {
 
     const row = input.closest("tr");
 
-    input.value = product.TenSP;
+    input.innerText = product.TenSP;
 
     const dropdown = input.nextElementSibling;
     dropdown.innerHTML = "";
