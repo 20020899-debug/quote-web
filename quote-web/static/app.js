@@ -183,7 +183,8 @@ function selectProduct(input, product) {
     const materialSelect =
         row.querySelector(".material-select");
 
-    materialSelect.innerHTML = "";
+    materialSelect.innerHTML =
+    '<option value="">-- Chọn --</option>';
 
     const materials = [
         ...new Set(
