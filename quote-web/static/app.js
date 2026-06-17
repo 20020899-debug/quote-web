@@ -266,3 +266,26 @@ function toggleBoldTextarea(input) {
         wrapped +
         text.substring(end);
 }
+function toExcelRich(text) {
+
+    const div = document.createElement("div");
+    div.innerHTML = text || "";
+
+    const result = [];
+
+    div.childNodes.forEach(n => {
+
+        if (n.nodeType === 3) {
+            result.push({ text: n.textContent, font: { bold: false } });
+        }
+
+        if (n.nodeType === 1) {
+            result.push({
+                text: n.textContent,
+                font: n.tagName === "B"
+            });
+        }
+    });
+
+    return { richText: result };
+}
