@@ -83,7 +83,7 @@ function addRow() {
 
     const qty = document.createElement("input");
     qty.type = "number";
-    qty.value = 1;
+    qty.innerText = 1;
     qty.oninput = () => calcRow(qty);
 
     td4.appendChild(qty);
@@ -144,7 +144,7 @@ function searchProduct(input) {
 
     const keyword =
     removeVietnameseTones(
-        input.value.trim().toLowerCase()
+        input.innerText.trim().toLowerCase()
     );
 
     const dropdown = input.nextElementSibling;
@@ -222,7 +222,7 @@ function selectProduct(input, product) {
 
     const row = input.closest("tr");
 
-    input.value = product.TenSP;
+    input.innerText = product.TenSP;
 
     const dropdown = input.nextElementSibling;
     dropdown.innerHTML = "";
@@ -247,7 +247,7 @@ function selectProduct(input, product) {
         const option =
             document.createElement("option");
 
-        option.value = vl;
+        option.innerText = vl;
         option.textContent = vl;
 
         materialSelect.appendChild(option);
@@ -264,8 +264,8 @@ function changeMaterial(select) {
     const row = select.closest("tr");
 
     const tenSP =
-    row.querySelector(".product-search").value;
-    const vatLieu = select.value;
+    row.querySelector(".product-search").innerText;
+    const vatLieu = select.innerText;
 
     const item = data.find(x =>
         x.TenSP === tenSP &&
@@ -274,7 +274,7 @@ function changeMaterial(select) {
 
     if (!item) {
 
-        row.querySelector(".spec").value = "";
+        row.querySelector(".spec").innerText = "";
 
         row.querySelector(".unit").textContent = "";
 
@@ -291,10 +291,10 @@ function changeMaterial(select) {
 
     // ===== ĐẶC TÍNH KỸ THUẬT =====
 
-    row.querySelector(".spec").value =
+    row.querySelector(".spec").innerText =
         item.DacTinh || "";
     // ===== XUẤT XỨ/ GHI CHÚ =====
-   row.querySelector(".origin").value =
+   row.querySelector(".origin").innerText =
     item.XuatXu || "";
     // ===== ĐƠN VỊ =====
 
@@ -320,7 +320,7 @@ function calcRow(input) {
     const row = input.closest("tr");
 
     const qty =
-        parseFloat(input.value) || 0;
+        parseFloat(input.innerText) || 0;
 
     const price =
         parseFloat(row.dataset.price) || 0;
@@ -348,7 +348,7 @@ function calcTotal() {
                 parseFloat(
                     row.querySelector(
                         "input[type='number']"
-                    ).value
+                    ).innerText
                 ) || 0;
 
             const price =
@@ -397,8 +397,8 @@ async function exportExcel() {
 
     const titleCell = sheet.getCell("A1");
 
-    titleCell.value =
-        document.querySelector(".system-input").value ||
+    titleCell.innerText =
+        document.querySelector(".system-input").innerText ||
         "BÁO GIÁ";
 
     titleCell.font = {
@@ -461,14 +461,14 @@ async function exportExcel() {
 
             sheet.addRow([
                 cells[0].innerText,
-                cells[1].querySelector(".product-search")?.value || "",
-                cells[2].querySelector("select")?.value || "",
-                cells[3].querySelector(".spec")?.value || "",
-                cells[4].querySelector("input[type='number']")?.value || "",
+                cells[1].querySelector(".product-search")?.innerText || "",
+                cells[2].querySelector("select")?.innerText || "",
+                cells[3].querySelector(".spec")?.innerText || "",
+                cells[4].querySelector("input[type='number']")?.innerText || "",
                 cells[5].innerText,
                 cells[6].innerText,
                 cells[7].innerText,
-                cells[8].querySelector(".origin")?.value || ""
+                cells[8].querySelector(".origin")?.innerText || ""
             ]);
         });
 
@@ -499,7 +499,7 @@ async function exportExcel() {
     });
 
     // Cột G = Đơn giá
-    if (row.getCell(7).value) {
+    if (row.getCell(7).innerText) {
         row.getCell(7).font = {
             name: "Times New Roman",
             size: 12.5,
@@ -513,7 +513,7 @@ async function exportExcel() {
     }
 
     // Cột H = Thành tiền
-    if (row.getCell(8).value) {
+    if (row.getCell(8).innerText) {
         row.getCell(8).font = {
             name: "Times New Roman",
             size: 12.5,
