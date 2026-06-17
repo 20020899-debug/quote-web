@@ -144,9 +144,11 @@ data.forEach(item => {
 
     if (!item.TenSP) return;
 
-    const tenSP =
-    removeVietnameseTones(
-        item.TenSP.toLowerCase()
+    const tenSP = removeVietnameseTones(
+        String(item.TenSP || "")
+            .replace(/\r/g, " ")
+            .replace(/\n/g, " ")
+            .toLowerCase()
     );
 
     const match =
