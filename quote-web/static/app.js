@@ -41,62 +41,84 @@ function addRow() {
     const tr = document.createElement("tr");
     tr.dataset.price = 0;
 
-    tr.innerHTML = `
+    // STT
+    const td0 = document.createElement("td");
+    td0.className = "stt";
 
-        <td class="stt"></td>
+    // SEARCH
+    const td1 = document.createElement("td");
+    td1.style.position = "relative";
 
-        <td style="position:relative;">
-           <textarea
-    class="multiline product-search"
-    placeholder="Tìm sản phẩm..."
-    oninput="searchProduct(this)">
-</textarea>
+    const search = document.createElement("div");
+    search.className = "multiline product-search";
+    search.contentEditable = true;
+    search.oninput = () => searchProduct(search);
 
-            <div class="dropdown"></div>
-        </td>
+    const dropdown = document.createElement("div");
+    dropdown.className = "dropdown";
 
-        <td>
-            <select class="material-select"
-                    onchange="changeMaterial(this)">
-                <option value="">-- Chọn --</option>
-            </select>
-        </td>
+    td1.append(search, dropdown);
 
-        <td>
-            <textarea
-    class="multiline spec"
-    placeholder="Đặc tính kỹ thuật">
-</textarea>
-        </td>
+    // MATERIAL
+    const td2 = document.createElement("td");
 
-        <td>
-            <input
-                type="number"
-                value="1"
-                min="0"
-                step="0.01"
-                oninput="calcRow(this)"
-            >
-        </td>
+    const select = document.createElement("select");
+    select.className = "material-select";
+    select.onchange = () => changeMaterial(select);
 
-        <td class="unit"></td>
+    select.innerHTML = `<option value="">-- Chọn --</option>`;
+    td2.appendChild(select);
 
-        <td class="price">0</td>
+    // SPEC
+    const td3 = document.createElement("td");
 
-        <td class="amount">0</td>
+    const spec = document.createElement("div");
+    spec.className = "multiline spec";
+    spec.contentEditable = true;
 
-        <td>
-    <textarea
-    class="multiline origin"
-    placeholder="Xuất xứ/Ghi chú">
-</textarea>
-   </td>
+    td3.appendChild(spec);
 
-        <td>
-            <button onclick="deleteRow(this)">X</button>
-        </td>
+    // QTY
+    const td4 = document.createElement("td");
 
-    `;
+    const qty = document.createElement("input");
+    qty.type = "number";
+    qty.value = 1;
+    qty.oninput = () => calcRow(qty);
+
+    td4.appendChild(qty);
+
+    // UNIT
+    const td5 = document.createElement("td");
+    td5.className = "unit";
+
+    // PRICE
+    const td6 = document.createElement("td");
+    td6.className = "price";
+
+    // AMOUNT
+    const td7 = document.createElement("td");
+    td7.className = "amount";
+
+    // ORIGIN
+    const td8 = document.createElement("td");
+
+    const origin = document.createElement("div");
+    origin.className = "multiline origin";
+    origin.contentEditable = true;
+
+    td8.appendChild(origin);
+
+    // DELETE
+    const td9 = document.createElement("td");
+
+    const del = document.createElement("button");
+    del.innerText = "X";
+    del.onclick = () => deleteRow(del);
+
+    td9.appendChild(del);
+
+    tr.append(td0, td1, td2, td3, td4, td5, td6, td7, td8, td9);
 
     tbody.appendChild(tr);
 
@@ -564,3 +586,13 @@ function removeVietnameseTones(str) {
         .replace(/đ/g, "d")
         .replace(/Đ/g, "D");
 }
+// =========================
+// Nút bôi đậm
+// =========================
+function makeBold() {
+    document.execCommand("bold");
+}
+const btn = document.createElement("button");
+btn.innerText = "B";
+btn.onclick = makeBold;
+document.body.prepend(btn); 
