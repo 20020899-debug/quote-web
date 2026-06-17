@@ -290,7 +290,9 @@ function toExcelRich(text) {
         if (n.nodeType === 1) {
             result.push({
                 text: n.textContent,
-                font: n.tagName === "B"
+                font: {
+    bold: n.tagName === "B" || n.tagName === "STRONG"
+}
             });
         }
     });
