@@ -174,8 +174,12 @@ data.forEach(item => {
 
         div.className = "dropdown-item";
 
-       div.innerHTML = `
-    <b>${item.TenSP}</b>
+       const tenHienThi =
+    String(item.TenSP || "")
+        .split("\n")[0];
+
+div.innerHTML = `
+    <b>${tenHienThi}</b>
 `;
 
         div.onclick = () => {
