@@ -145,7 +145,9 @@ data.forEach(item => {
     if (!item.TenSP) return;
 
     const tenSP =
-        item.TenSP.toLowerCase();
+    removeVietnameseTones(
+        item.TenSP.toLowerCase()
+    );
 
     const match =
         keywords.every(k =>
