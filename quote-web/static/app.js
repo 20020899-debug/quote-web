@@ -216,10 +216,11 @@ function changeMaterial(select) {
 
     const tenSP =
     row.querySelector(".product-search").value;
+    const vatLieu = select.value;
 
-const item = data.find(x =>
-    x.TenSP === tenSP &&
-    x.VatLieu === vatLieu
+    const item = data.find(x =>
+        x.TenSP === tenSP &&
+        x.VatLieu === vatLieu
 );
 
     if (!item) {
