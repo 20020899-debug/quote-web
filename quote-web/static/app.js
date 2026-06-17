@@ -133,17 +133,32 @@ function searchProduct(input) {
 
     const products = [];
 
-    data.forEach(item => {
+const keywords = keyword
+    .split(" ")
+    .filter(k => k.trim() !== "");
 
-    if (
-        item.TenSP &&
-        item.TenSP.toLowerCase().includes(keyword)
-    ) {
+data.forEach(item => {
 
-        if (!products.some(p => p.TenSP === item.TenSP)) {
+    if (!item.TenSP) return;
+
+    const tenSP =
+        item.TenSP.toLowerCase();
+
+    const match =
+        keywords.every(k =>
+            tenSP.includes(k)
+        );
+
+    if (match) {
+
+        if (!products.some(
+            p => p.TenSP === item.TenSP
+        )) {
             products.push(item);
         }
+
     }
+
 });
 
    products.forEach(item => {
