@@ -130,6 +130,8 @@ function selectProduct(input, p) {
 
     const row = input.closest("tr");
     input.value = p.TenSP;
+    boldMap.delete(input);
+    input.style.fontWeight = "normal";
 
     const dd = input.nextElementSibling;
     dd.innerHTML = "";
