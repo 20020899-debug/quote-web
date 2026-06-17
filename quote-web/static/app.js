@@ -337,51 +337,6 @@ document.addEventListener("input", function(e){
 // =========================
 // XUẤT EXCEL
 // =========================
-function exportExcel() {
-
-    let table = document.getElementById("quoteTable");
-
-    // clone bảng để không phá UI
-    let clone = table.cloneNode(true);
-
-    // =========================
-    // 1. Chuyển input -> text
-    // =========================
-    clone.querySelectorAll("input, textarea, select").forEach(el => {
-
-        let value = "";
-
-        if (el.tagName === "SELECT") {
-            value = el.options[el.selectedIndex]?.text || "";
-        } else {
-            value = el.value;
-        }
-
-        let td = el.parentElement;
-        td.innerText = value;
-    });
-
-    // =========================
-    // 2. Xoá cột nút X
-    // =========================
-    clone.querySelectorAll("tr").forEach(tr => {
-        if (tr.children.length > 0) {
-            tr.lastElementChild?.remove();
-        }
-    });
-
-    // =========================
-    // 3. Export Excel
-    // =========================
-    let wb = XLSX.utils.book_new();
-    let ws = XLSX.utils.table_to_sheet(clone, {
-        raw: true
-    });
-
-    XLSX.utils.book_append_sheet(wb, ws, "BaoGia");
-
-    XLSX.writeFile(wb, "bao_gia.xlsx");
-}
 async function exportExcel() {
 
     const workbook = new ExcelJS.Workbook();
