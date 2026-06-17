@@ -39,8 +39,6 @@ function addRow() {
     const tbody = document.getElementById("body");
 
     const tr = document.createElement("tr");
-
-    tr.dataset.ma = "";
     tr.dataset.price = 0;
 
     tr.innerHTML = `
