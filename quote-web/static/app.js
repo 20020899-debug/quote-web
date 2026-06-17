@@ -595,3 +595,34 @@ const btn = document.createElement("button");
 btn.innerText = "B";
 btn.onclick = makeBold;
 document.body.prepend(btn); 
+function toExcelRich(cell) {
+
+    const div = document.createElement("div");
+    div.innerHTML = cell.innerHTML || "";
+
+    const result = [];
+
+    div.childNodes.forEach(node => {
+
+        if (node.nodeType === 3) {
+            result.push({
+                text: node.textContent,
+                font: { bold: false }
+            });
+        }
+
+        if (node.nodeType === 1) {
+
+            const bold =
+                node.tagName === "B" ||
+                node.tagName === "STRONG";
+
+            result.push({
+                text: node.textContent,
+                font: { bold }
+            });
+        }
+    });
+
+    return { richText: result };
+}
