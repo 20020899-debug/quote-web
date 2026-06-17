@@ -190,8 +190,8 @@ function selectProduct(input, product) {
     const materials = [
         ...new Set(
             data
-                .filter(x => x.MaSP === product.MaSP)
-                .map(x => x.VatLieu)
+    .filter(x => x.TenSP === product.TenSP)
+    .map(x => x.VatLieu)
         )
     ];
 
