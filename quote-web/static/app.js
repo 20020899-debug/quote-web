@@ -154,7 +154,8 @@ function selectProduct(input, p) {
 function changeMaterial(sel) {
 
     const row = sel.closest("tr");
-    const name = $(".product-search", row).value;
+
+    const name = $(".product-search", row).value.trim(); // FIX
 
     const item = data.find(x =>
         x.TenSP === name && x.VatLieu === sel.value
