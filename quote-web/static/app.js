@@ -172,8 +172,6 @@ function selectProduct(input, product) {
 
     const row = input.closest("tr");
 
-    row.dataset.ma = product.MaSP;
-
     input.value = product.TenSP;
 
     const dropdown = input.nextElementSibling;
