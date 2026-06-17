@@ -216,13 +216,13 @@ function changeMaterial(select) {
 
     const row = select.closest("tr");
 
-    const ma = row.dataset.ma;
-    const vatLieu = select.value;
+    const tenSP =
+    row.querySelector(".product-search").value;
 
-    const item = data.find(x =>
-        x.MaSP === ma &&
-        x.VatLieu === vatLieu
-    );
+const item = data.find(x =>
+    x.TenSP === tenSP &&
+    x.VatLieu === vatLieu
+);
 
     if (!item) {
 
