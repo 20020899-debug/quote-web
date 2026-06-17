@@ -120,7 +120,10 @@ function deleteRow(btn) {
 // =========================
 function searchProduct(input) {
 
-    const keyword = input.value.trim().toLowerCase();
+    const keyword =
+    removeVietnameseTones(
+        input.value.trim().toLowerCase()
+    );
 
     const dropdown = input.nextElementSibling;
 
