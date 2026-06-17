@@ -453,27 +453,31 @@ async function exportExcel() {
         });
 
     // Format toàn bộ bảng
-    sheet.eachRow((row, rowNumber) => {
+   sheet.eachRow((row, rowNumber) => {
 
-        if (rowNumber <= 2) return;
+    if (rowNumber <= 2) return;
 
-        row.eachCell(cell => {
+    row.eachCell(cell => {
 
-            cell.alignment = {
-                horizontal: "center",
-                vertical: "middle",
-                wrapText: true
-            };
+        cell.font = {
+            name: "Arial",
+            size: 12.5
+        };
 
-            cell.border = {
-                top: { style: "thin" },
-                left: { style: "thin" },
-                bottom: { style: "thin" },
-                right: { style: "thin" }
-            };
-        });
+        cell.alignment = {
+            horizontal: "center",
+            vertical: "middle",
+            wrapText: true
+        };
+
+        cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" }
+        };
     });
-
+});
     // Độ rộng cột
     sheet.columns = [
         { width: 8 },
