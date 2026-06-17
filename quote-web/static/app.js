@@ -319,7 +319,7 @@ function calcRow(input) {
     const row = input.closest("tr");
 
     const qty =
-        parseFloat(input.innerText) || 0;
+        parseFloat(input.value) || 0;
 
     const price =
         parseFloat(row.dataset.price) || 0;
