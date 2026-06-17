@@ -7,6 +7,7 @@ async function loadData() {
     try {
         const res = await fetch("/data");
         data = await res.json();
+
         console.log("Đã load:", data.length, "dòng");
     } catch (err) {
         console.error("Lỗi load data:", err);
@@ -21,12 +22,13 @@ function formatMoney(value) {
 }
 
 // =========================
-// STT
+// ĐÁNH STT
 // =========================
 function updateSTT() {
-    document.querySelectorAll("#body tr").forEach((row, i) => {
-        row.querySelector(".stt").textContent = i + 1;
-    });
+    document.querySelectorAll("#body tr")
+        .forEach((row, index) => {
+            row.querySelector(".stt").textContent = index + 1;
+        });
 }
 
 // =========================
@@ -37,32 +39,46 @@ function addRow() {
     const tbody = document.getElementById("body");
 
     const tr = document.createElement("tr");
+
+    tr.dataset.ma = "";
     tr.dataset.price = 0;
 
     tr.innerHTML = `
+
         <td class="stt"></td>
 
         <td style="position:relative;">
-            <div class="multiline product-search"
-                 contenteditable="true"
-                 oninput="searchProduct(this)"></div>
+           <textarea
+    class="multiline product-search"
+    placeholder="Tìm sản phẩm..."
+    oninput="searchProduct(this)">
+</textarea>
 
             <div class="dropdown"></div>
         </td>
 
         <td>
-            <select class="material-select" onchange="changeMaterial(this)">
+            <select class="material-select"
+                    onchange="changeMaterial(this)">
                 <option value="">-- Chọn --</option>
             </select>
         </td>
 
         <td>
-            <div class="multiline spec" contenteditable="true"></div>
+            <textarea
+    class="multiline spec"
+    placeholder="Đặc tính kỹ thuật">
+</textarea>
         </td>
 
         <td>
-            <input type="number" value="1" min="0" step="0.01"
-                   oninput="calcRow(this)">
+            <input
+                type="number"
+                value="1"
+                min="0"
+                step="0.01"
+                oninput="calcRow(this)"
+            >
         </td>
 
         <td class="unit"></td>
@@ -72,15 +88,20 @@ function addRow() {
         <td class="amount">0</td>
 
         <td>
-            <div class="multiline origin" contenteditable="true"></div>
-        </td>
+    <textarea
+    class="multiline origin"
+    placeholder="Xuất xứ/Ghi chú">
+</textarea>
+   </td>
 
         <td>
             <button onclick="deleteRow(this)">X</button>
         </td>
+
     `;
 
     tbody.appendChild(tr);
+
     updateSTT();
 }
 
@@ -88,21 +109,23 @@ function addRow() {
 // XÓA DÒNG
 // =========================
 function deleteRow(btn) {
+
     btn.closest("tr").remove();
+
     updateSTT();
+
     calcTotal();
 }
 
 // =========================
-// SEARCH
+// SEARCH SẢN PHẨM
 // =========================
 function searchProduct(input) {
 
-    const keyword = removeVietnameseTones(
-        input.innerText.trim().toLowerCase()
-    );
+    const keyword = input.value.trim().toLowerCase();
 
     const dropdown = input.nextElementSibling;
+
     dropdown.innerHTML = "";
 
     if (!keyword) {
@@ -110,37 +133,39 @@ function searchProduct(input) {
         return;
     }
 
-    const keywords = keyword.split(" ").filter(Boolean);
     const products = [];
 
     data.forEach(item => {
 
-        if (!item.TenSP) return;
-
-        const tenSP = removeVietnameseTones(
-            String(item.TenSP).toLowerCase()
-        );
-
-        const match = keywords.every(k => tenSP.includes(k));
-
-        if (match && !products.some(p => p.TenSP === item.TenSP)) {
+        if (
+            item.TenSP &&
+            item.TenSP.toLowerCase().includes(keyword) &&
+            !products.some(p => p.MaSP === item.MaSP)
+        ) {
             products.push(item);
         }
     });
 
-    products.forEach(item => {
+    products.slice(0, 10).forEach(item => {
 
         const div = document.createElement("div");
+
         div.className = "dropdown-item";
 
-        div.innerHTML = `<b>${item.TenSP.split("\n")[0]}</b>`;
+        div.innerHTML = `
+            <b>${item.MaSP}</b><br>
+            ${item.TenSP}
+        `;
 
-        div.onclick = () => selectProduct(input, item);
+        div.onclick = () => {
+            selectProduct(input, item);
+        };
 
         dropdown.appendChild(div);
     });
 
-    dropdown.style.display = products.length ? "block" : "none";
+    dropdown.style.display =
+        products.length ? "block" : "none";
 }
 
 // =========================
@@ -150,28 +175,36 @@ function selectProduct(input, product) {
 
     const row = input.closest("tr");
 
-    input.innerText = product.TenSP;
+    row.dataset.ma = product.MaSP;
+
+    input.value = product.TenSP;
 
     const dropdown = input.nextElementSibling;
     dropdown.innerHTML = "";
     dropdown.style.display = "none";
 
-    const materialSelect = row.querySelector(".material-select");
-    materialSelect.innerHTML = '<option value="">-- Chọn --</option>';
+    const materialSelect =
+        row.querySelector(".material-select");
+
+    materialSelect.innerHTML = "";
 
     const materials = [
         ...new Set(
             data
-                .filter(x => x.TenSP === product.TenSP)
+                .filter(x => x.MaSP === product.MaSP)
                 .map(x => x.VatLieu)
         )
     ];
 
     materials.forEach(vl => {
-        const opt = document.createElement("option");
-        opt.value = vl;
-        opt.textContent = vl;
-        materialSelect.appendChild(opt);
+
+        const option =
+            document.createElement("option");
+
+        option.value = vl;
+        option.textContent = vl;
+
+        materialSelect.appendChild(option);
     });
 
     changeMaterial(materialSelect);
@@ -184,180 +217,386 @@ function changeMaterial(select) {
 
     const row = select.closest("tr");
 
-    const tenSP = row.querySelector(".product-search").innerText.trim();
+    const ma = row.dataset.ma;
     const vatLieu = select.value;
 
     const item = data.find(x =>
-        x.TenSP === tenSP &&
+        x.MaSP === ma &&
         x.VatLieu === vatLieu
     );
 
     if (!item) {
-        row.querySelector(".spec").innerText = "";
-        row.querySelector(".origin").innerText = "";
+
+        row.querySelector(".spec").value = "";
+
         row.querySelector(".unit").textContent = "";
+
         row.querySelector(".price").textContent = "0";
+
         row.dataset.price = 0;
-        calcRow(row.querySelector("input"));
+
+        calcRow(
+            row.querySelector("input[type='number']")
+        );
+
         return;
     }
 
-    row.querySelector(".spec").innerText = item.DacTinh || "";
-    row.querySelector(".origin").innerText = item.XuatXu || "";
-    row.querySelector(".unit").textContent = item.DonVi || "";
+    // ===== ĐẶC TÍNH KỸ THUẬT =====
 
-    row.querySelector(".price").textContent = formatMoney(item.DonGia);
+    row.querySelector(".spec").value =
+        item.DacTinh || "";
+    // ===== XUẤT XỨ/ GHI CHÚ =====
+   row.querySelector(".origin").value =
+    item.XuatXu || "";
+    // ===== ĐƠN VỊ =====
+
+    row.querySelector(".unit").textContent =
+        item.DonVi || "";
+
+    // ===== ĐƠN GIÁ =====
+
+    row.querySelector(".price").textContent =
+        formatMoney(item.DonGia);
+
     row.dataset.price = item.DonGia;
+    row.dataset.loai = item.LoaiTinhGia || "";
 
-    calcRow(row.querySelector("input"));
+    calcRow(
+        row.querySelector("input[type='number']")
+    );
 }
-
 // =========================
-// TÍNH DÒNG
+// TÍNH THÀNH TIỀN
 // =========================
 function calcRow(input) {
 
     const row = input.closest("tr");
 
-    const qty = parseFloat(input.value) || 0;
-    const price = parseFloat(row.dataset.price) || 0;
+    const qty =
+        parseFloat(input.value) || 0;
 
-    const amount = qty * price;
+    const price =
+        parseFloat(row.dataset.price) || 0;
 
-    row.querySelector(".amount").textContent = formatMoney(amount);
+    const loai = row.dataset.loai || "";
+
+let amount = 0;
+
+if (loai === "LINEAR") {
+
+    // Mét
+    amount = qty * price;
+
+}
+else if (loai === "WEIGHT") {
+
+    // Kg
+    amount = qty * price;
+
+}
+else if (loai === "PIECE") {
+
+    // Chiếc
+    amount = qty * price;
+
+}
+else {
+
+    amount = qty * price;
+
+}
+
+    row.querySelector(".amount").textContent =
+        formatMoney(amount);
 
     calcTotal();
 }
 
 // =========================
-// TỔNG
+// TỔNG TIỀN
 // =========================
 function calcTotal() {
 
     let total = 0;
 
-    document.querySelectorAll("#body tr").forEach(row => {
+    document
+        .querySelectorAll("#body tr")
+        .forEach(row => {
 
-        const qty = parseFloat(row.querySelector("input").value) || 0;
-        const price = parseFloat(row.dataset.price) || 0;
+            const qty =
+                parseFloat(
+                    row.querySelector(
+                        "input[type='number']"
+                    ).value
+                ) || 0;
 
-        total += qty * price;
-    });
+            const price =
+                parseFloat(row.dataset.price) || 0;
 
-    document.getElementById("total").textContent = formatMoney(total);
+            total += qty * price;
+        });
+
+    document.getElementById("total").textContent =
+        formatMoney(total);
 }
 
 // =========================
-// LOAD
+// KHỞI TẠO
 // =========================
 window.onload = async function () {
+
     await loadData();
+
     addRow();
 };
+// =========================
+// Ô tự động cao lên khi số dòng tăng
+// =========================
+document.addEventListener("input", function(e){
 
-// =========================
-// AUTO HEIGHT (contenteditable)
-// =========================
-document.addEventListener("input", e => {
-    if (e.target.classList.contains("multiline")) {
+    if(
+    e.target.classList.contains("multiline")
+    ){
         e.target.style.height = "auto";
-        e.target.style.height = e.target.scrollHeight + "px";
+        e.target.style.height =
+            e.target.scrollHeight + "px";
     }
-});
 
+});
 // =========================
-// EXPORT EXCEL (GIỮ BOLD)
+// XUẤT EXCEL
 // =========================
+function exportExcel() {
+
+    let table = document.getElementById("quoteTable");
+
+    // clone bảng để không phá UI
+    let clone = table.cloneNode(true);
+
+    // =========================
+    // 1. Chuyển input -> text
+    // =========================
+    clone.querySelectorAll("input, textarea, select").forEach(el => {
+
+        let value = "";
+
+        if (el.tagName === "SELECT") {
+            value = el.options[el.selectedIndex]?.text || "";
+        } else {
+            value = el.value;
+        }
+
+        let td = el.parentElement;
+        td.innerText = value;
+    });
+
+    // =========================
+    // 2. Xoá cột nút X
+    // =========================
+    clone.querySelectorAll("tr").forEach(tr => {
+        if (tr.children.length > 0) {
+            tr.lastElementChild?.remove();
+        }
+    });
+
+    // =========================
+    // 3. Export Excel
+    // =========================
+    let wb = XLSX.utils.book_new();
+    let ws = XLSX.utils.table_to_sheet(clone, {
+        raw: true
+    });
+
+    XLSX.utils.book_append_sheet(wb, ws, "BaoGia");
+
+    XLSX.writeFile(wb, "bao_gia.xlsx");
+}
 async function exportExcel() {
 
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet("BaoGia");
 
+    // Tiêu đề
     sheet.mergeCells("A1:I1");
 
-    const title = sheet.getCell("A1");
-    title.value = document.querySelector(".system-input").value || "BÁO GIÁ";
-    title.font = { bold: true, size: 16 };
-    title.alignment = { horizontal: "center" };
+    const titleCell = sheet.getCell("A1");
 
+    titleCell.value =
+        document.querySelector(".system-input").value ||
+        "BÁO GIÁ";
+
+    titleCell.font = {
+        bold: true,
+        size: 16
+    };
+
+    titleCell.alignment = {
+        horizontal: "center",
+        vertical: "middle"
+    };
+
+    // Header
     const headers = [
-        "STT","Tên SP","VL","KT","SL","ĐV","ĐG","TT","Xuất xứ"
+        "STT",
+        "Tên Sản Phẩm",
+        "Vật liệu",
+        "Đặc tính kỹ thuật",
+        "Số lượng",
+        "Đơn vị",
+        "Đơn giá",
+        "Thành tiền",
+        "Xuất xứ/Ghi chú"
     ];
 
-    sheet.addRow(headers);
+    const headerRow = sheet.addRow(headers);
 
-    document.querySelectorAll("#body tr").forEach(row => {
+    headerRow.eachCell(cell => {
 
-        const cells = row.children;
+        cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "198754" }
+        };
 
-        sheet.addRow([
-            cells[0].innerText,
-            toExcelRich(cells[1]),
-            cells[2].querySelector("select")?.value || "",
-            toExcelRich(cells[3]),
-            cells[4].value,
-            cells[5].innerText,
-            cells[6].innerText,
-            cells[7].innerText,
-            toExcelRich(cells[8])
-        ]);
+        cell.font = {
+            bold: true,
+            color: { argb: "000000" }
+        };
+
+        cell.alignment = {
+            horizontal: "center",
+            vertical: "middle",
+            wrapText: true
+        };
+
+        cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" }
+        };
     });
 
+    // Dữ liệu
+    document.querySelectorAll("#body tr")
+        .forEach(row => {
+
+            const cells = row.children;
+
+            sheet.addRow([
+                cells[0].innerText,
+                cells[1].querySelector(".product-search")?.value || "",
+                cells[2].querySelector("select")?.value || "",
+                cells[3].querySelector(".spec")?.value || "",
+                cells[4].querySelector("input[type='number']")?.value || "",
+                cells[5].innerText,
+                cells[6].innerText,
+                cells[7].innerText,
+                cells[8].querySelector(".origin")?.value || ""
+            ]);
+        });
+
+    // Format toàn bộ bảng
+    sheet.eachRow((row, rowNumber) => {
+
+    if (rowNumber <= 2) return;
+
+    row.eachCell(cell => {
+
+        cell.font = {
+            name: "Arial",
+            size: 12.5
+        };
+
+        cell.alignment = {
+            horizontal: "center",
+            vertical: "middle",
+            wrapText: true
+        };
+
+        cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" }
+        };
+    });
+
+    // Cột G = Đơn giá
+    if (row.getCell(7).value) {
+        row.getCell(7).font = {
+            name: "Times New Roman",
+            size: 12.5,
+            bold: true
+        };
+
+        row.getCell(7).alignment = {
+            horizontal: "right",
+            vertical: "middle"
+        };
+    }
+
+    // Cột H = Thành tiền
+    if (row.getCell(8).value) {
+        row.getCell(8).font = {
+            name: "Times New Roman",
+            size: 12.5,
+            bold: true
+        };
+
+        row.getCell(8).alignment = {
+            horizontal: "right",
+            vertical: "middle"
+        };
+    }
+
+});
+    // Độ rộng cột
     sheet.columns = [
         { width: 8 },
         { width: 35 },
-        { width: 15 },
+        { width: 18 },
         { width: 40 },
-        { width: 10 },
-        { width: 10 },
-        { width: 15 },
-        { width: 15 },
+        { width: 12 },
+        { width: 12 },
+        { width: 18 },
+        { width: 18 },
         { width: 25 }
     ];
 
-    const buffer = await workbook.xlsx.writeBuffer();
-    saveAs(new Blob([buffer]), "BaoGia.xlsx");
-}
+    // Tổng cộng
+    const total =
+        document.getElementById("total").innerText;
 
-// =========================
-// HTML → EXCEL RICH TEXT (GIỮ BOLD)
-// =========================
-function toExcelRich(cell) {
+    const totalRow = sheet.addRow([
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "TỔNG CỘNG",
+        total
+    ]);
 
-    const div = document.createElement("div");
-    div.innerHTML = cell.innerHTML || "";
+    totalRow.eachCell(cell => {
 
-    const result = [];
+        cell.font = { bold: true };
 
-    div.childNodes.forEach(node => {
-
-        if (node.nodeType === 3) {
-            result.push({ text: node.textContent, font: { bold: false } });
-        }
-
-        if (node.nodeType === 1) {
-
-            const isBold =
-                node.tagName === "B" ||
-                node.tagName === "STRONG";
-
-            result.push({
-                text: node.textContent,
-                font: { bold: isBold }
-            });
-        }
+        cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" }
+        };
     });
 
-    return { richText: result };
-}
+    const buffer =
+        await workbook.xlsx.writeBuffer();
 
-// =========================
-// REMOVE TONE
-// =========================
-function removeVietnameseTones(str) {
-    if (!str) return "";
-    return str.normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/đ/g, "d")
-        .replace(/Đ/g, "D");
+    saveAs(
+        new Blob([buffer]),
+        "BaoGia.xlsx"
+    );
 }
