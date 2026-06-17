@@ -21,6 +21,8 @@ try:
     print("Đọc Excel thành công")
     print("Columns:", df.columns.tolist())
     print(df.head())
+    print("Số dòng:", len(df))
+    print(df.tail(20))
 
 except Exception as e:
     print("LỖI ĐỌC EXCEL:", e)
