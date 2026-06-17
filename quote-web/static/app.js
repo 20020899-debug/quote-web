@@ -142,7 +142,7 @@ function searchProduct(input) {
 function selectProduct(input, p) {
 
     const row = input.closest("tr");
-    input.value = p.TenSP;
+    input.value = p.TenSP.replace(/<[^>]*>/g, "");
 
     const dd = input.nextElementSibling;
     dd.innerHTML = "";
