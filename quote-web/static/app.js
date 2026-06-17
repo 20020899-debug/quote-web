@@ -138,12 +138,9 @@ function searchProduct(input) {
     data.forEach(item => {
 
         if (
-            item.TenSP &&
-            item.TenSP.toLowerCase().includes(keyword) &&
-            !products.some(p => p.MaSP === item.MaSP)
-        ) {
-            products.push(item);
-        }
+    item.TenSP &&
+    item.TenSP.toLowerCase().includes(keyword)
+)
     });
 
     products.slice(0, 10).forEach(item => {
