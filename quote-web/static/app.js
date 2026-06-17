@@ -556,7 +556,9 @@ async function exportExcel() {
 
 function removeVietnameseTones(str) {
 
-    return str
+    if (!str) return "";
+
+    return String(str)
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/đ/g, "d")
