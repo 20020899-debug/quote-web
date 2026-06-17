@@ -46,13 +46,16 @@ function addRow() {
         <td class="stt"></td>
 
         <td style="position:relative;">
-           <textarea
-    class="multiline product-search"
-    placeholder="Tìm sản phẩm..."
-    oninput="searchProduct(this)">
-</textarea>
+
+            <div
+                class="multiline product-search"
+                contenteditable="true"
+                placeholder="Tìm sản phẩm..."
+                oninput="searchProduct(this)">
+            </div>
 
             <div class="dropdown"></div>
+
         </td>
 
         <td>
@@ -63,10 +66,11 @@ function addRow() {
         </td>
 
         <td>
-            <textarea
-    class="multiline spec"
-    placeholder="Đặc tính kỹ thuật">
-</textarea>
+            <div
+                class="multiline spec"
+                contenteditable="true"
+                placeholder="Đặc tính kỹ thuật">
+            </div>
         </td>
 
         <td>
@@ -75,8 +79,7 @@ function addRow() {
                 value="1"
                 min="0"
                 step="0.01"
-                oninput="calcRow(this)"
-            >
+                oninput="calcRow(this)">
         </td>
 
         <td class="unit"></td>
@@ -86,11 +89,12 @@ function addRow() {
         <td class="amount">0</td>
 
         <td>
-    <textarea
-    class="multiline origin"
-    placeholder="Xuất xứ/Ghi chú">
-</textarea>
-   </td>
+            <div
+                class="multiline origin"
+                contenteditable="true"
+                placeholder="Xuất xứ/Ghi chú">
+            </div>
+        </td>
 
         <td>
             <button onclick="deleteRow(this)">X</button>
@@ -102,7 +106,6 @@ function addRow() {
 
     updateSTT();
 }
-
 // =========================
 // XÓA DÒNG
 // =========================
@@ -564,3 +567,11 @@ function removeVietnameseTones(str) {
         .replace(/đ/g, "d")
         .replace(/Đ/g, "D");
 }
+
+function makeBold() {
+    document.execCommand("bold");
+}
+const btn = document.createElement("button");
+btn.innerText = "B";
+btn.onclick = makeBold;
+document.body.prepend(btn); // hoặc chỗ bạn muốn
