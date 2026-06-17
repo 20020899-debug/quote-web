@@ -111,10 +111,12 @@ function searchProduct(input) {
     const keys = kw.split(" ").filter(Boolean);
 
     const list = data.filter(x =>
-        x.TenSP && keys.every(k =>
-            removeVietnameseTones(x.TenSP.toLowerCase()).includes(k)
-        )
-    );
+    x.TenSP && keys.every(k =>
+        removeVietnameseTones(
+            x.TenSP.replace(/<[^>]*>/g, "").toLowerCase()
+        ).includes(k)
+    )
+);
 
     const unique = [...new Map(list.map(x => [x.TenSP, x])).values()];
 
