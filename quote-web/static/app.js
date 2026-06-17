@@ -96,7 +96,13 @@ function deleteRow(btn) {
 // =========================
 function searchProduct(input) {
 
-    const kw = removeVietnameseTones(input.value.toLowerCase().trim());
+    const kw = removeVietnameseTones(
+        input.value
+            .replace(/<[^>]*>/g, "")   // ⭐ THÊM DÒNG NÀY
+            .toLowerCase()
+            .trim()
+    );
+
     const dd = input.nextElementSibling;
 
     dd.innerHTML = "";
@@ -115,14 +121,19 @@ function searchProduct(input) {
     unique.forEach(item => {
         const div = document.createElement("div");
         div.className = "dropdown-item";
-        div.innerHTML = `<b>${item.TenSP.split("\n")[0]}</b>`;
+
+        // ⭐ cũng nên strip luôn cho an toàn
+        const cleanName = item.TenSP.replace(/<[^>]*>/g, "");
+
+        div.innerHTML = `<b>${cleanName.split("\n")[0]}</b>`;
+
         div.onclick = () => selectProduct(input, item);
+
         dd.appendChild(div);
     });
 
     dd.style.display = unique.length ? "block" : "none";
 }
-
 // =========================
 // SELECT PRODUCT
 // =========================
