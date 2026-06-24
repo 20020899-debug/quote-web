@@ -35,71 +35,44 @@ function updateSTT() {
 // THÊM DÒNG
 // =========================
 function addRow() {
-
-    const tbody = document.getElementById("body");
-
     const tr = document.createElement("tr");
     tr.dataset.price = 0;
 
     tr.innerHTML = `
+    <td class="stt"></td>
 
-        <td class="stt"></td>
+    <td style="position:relative;">
+        <textarea class="multiline product-search" placeholder="Tìm sản phẩm..." oninput="searchProduct(this)"></textarea>
+        <div class="dropdown"></div>
+    </td>
 
-        <td style="position:relative;">
-           <textarea
-    class="multiline product-search"
-    placeholder="Tìm sản phẩm..."
-    oninput="searchProduct(this)">
-</textarea>
+    <td>
+        <select class="material-select" onchange="changeMaterial(this)">
+            <option value="">-- Chọn --</option>
+        </select>
+    </td>
 
-            <div class="dropdown"></div>
-        </td>
+    <td>
+        <textarea class="multiline spec" placeholder="Đặc tính kỹ thuật"></textarea>
+    </td>
 
-        <td>
-            <select class="material-select"
-                    onchange="changeMaterial(this)">
-                <option value="">-- Chọn --</option>
-            </select>
-        </td>
+    <td>
+        <input type="number" value="1" min="0" step="0.01" oninput="calcRow(this)">
+    </td>
 
-        <td>
-            <textarea
-    class="multiline spec"
-    placeholder="Đặc tính kỹ thuật">
-</textarea>
-        </td>
+    <td class="unit"></td>
+    <td class="price">0</td>
+    <td class="amount">0</td>
 
-        <td>
-            <input
-                type="number"
-                value="1"
-                min="0"
-                step="0.01"
-                oninput="calcRow(this)"
-            >
-        </td>
+    <td>
+        <textarea class="multiline origin" placeholder="Xuất xứ/Ghi chú"></textarea>
+    </td>
 
-        <td class="unit"></td>
+    <td>
+        <button onclick="deleteRow(this)">X</button>
+    </td>`;
 
-        <td class="price">0</td>
-
-        <td class="amount">0</td>
-
-        <td>
-    <textarea
-    class="multiline origin"
-    placeholder="Xuất xứ/Ghi chú">
-</textarea>
-   </td>
-
-        <td>
-            <button onclick="deleteRow(this)">X</button>
-        </td>
-
-    `;
-
-    tbody.appendChild(tr);
-
+    document.getElementById("body").appendChild(tr);
     updateSTT();
 }
 
@@ -119,12 +92,7 @@ function deleteRow(btn) {
 // SEARCH SẢN PHẨM
 // =========================
 function searchProduct(input) {
-
-    const keyword =
-    removeVietnameseTones(
-        input.value.trim().toLowerCase()
-    );
-
+    const keyword = removeVietnameseTones(input.value.trim().toLowerCase());
     const dropdown = input.nextElementSibling;
 
     dropdown.innerHTML = "";
@@ -134,102 +102,68 @@ function searchProduct(input) {
         return;
     }
 
+    const keywords = keyword.split(" ").filter(Boolean);
     const products = [];
 
-const keywords = keyword
-    .split(" ")
-    .filter(k => k.trim() !== "");
+    data.forEach(item => {
+        if (!item.TenSP) return;
 
-data.forEach(item => {
-
-    if (!item.TenSP) return;
-
-    const tenSP = removeVietnameseTones(
-        String(item.TenSP || "")
-            .replace(/\r/g, " ")
-            .replace(/\n/g, " ")
-            .toLowerCase()
-    );
-
-    const match =
-        keywords.every(k =>
-            tenSP.includes(k)
+        const tenSP = removeVietnameseTones(
+            String(item.TenSP)
+                .replace(/\r/g, " ")
+                .replace(/\n/g, " ")
+                .toLowerCase()
         );
 
-    if (match) {
-
-        if (!products.some(
-            p => p.TenSP === item.TenSP
-        )) {
+        if (
+            keywords.every(k => tenSP.includes(k)) &&
+            !products.some(p => p.TenSP === item.TenSP)
+        ) {
             products.push(item);
         }
+    });
 
-    }
-
-});
-
-   products.forEach(item => {
-
+    products.forEach(item => {
         const div = document.createElement("div");
-
         div.className = "dropdown-item";
 
-       const tenHienThi =
-    String(item.TenSP || "")
-        .split("\n")[0];
+        const tenHienThi = String(item.TenSP).split("\n")[0];
 
-div.innerHTML = `
-    <b>${tenHienThi}</b>
-`;
-
-        div.onclick = () => {
-            selectProduct(input, item);
-        };
+        div.innerHTML = `<b>${tenHienThi}</b>`;
+        div.onclick = () => selectProduct(input, item);
 
         dropdown.appendChild(div);
     });
 
-    dropdown.style.display =
-        products.length ? "block" : "none";
+    dropdown.style.display = products.length ? "block" : "none";
 }
-
 // =========================
 // CHỌN SẢN PHẨM
 // =========================
 function selectProduct(input, product) {
-
     const row = input.closest("tr");
+    const dropdown = input.nextElementSibling;
+    const materialSelect = row.querySelector(".material-select");
 
     input.value = product.TenSP;
-
-    const dropdown = input.nextElementSibling;
     dropdown.innerHTML = "";
     dropdown.style.display = "none";
 
-    const materialSelect =
-        row.querySelector(".material-select");
+    materialSelect.innerHTML = '<option value="">-- Chọn --</option>';
 
-    materialSelect.innerHTML =
-    '<option value="">-- Chọn --</option>';
-
-    const materials = [
-        ...new Set(
-            data
-    .filter(x => x.TenSP === product.TenSP)
-    .map(x => x.VatLieu)
-        )
-    ];
+    const materials = [...new Set(
+        data
+            .filter(x => x.TenSP === product.TenSP)
+            .map(x => x.VatLieu)
+    )];
 
     materials.forEach(vl => {
-
-        const option =
-            document.createElement("option");
-
-        option.value = vl;
-        option.textContent = vl;
-
+        const option = document.createElement("option");
+        option.value = option.textContent = vl;
         materialSelect.appendChild(option);
     });
+
+    if (materials.length === 1) materialSelect.value = materials[0];
 
     changeMaterial(materialSelect);
 }
@@ -370,27 +304,27 @@ async function exportExcel() {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet("BaoGia");
 
-    // Tiêu đề
+    const border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" }
+    };
+
+    const center = {
+        horizontal: "center",
+        vertical: "middle",
+        wrapText: true
+    };
+
     sheet.mergeCells("A1:I1");
 
     const titleCell = sheet.getCell("A1");
+    titleCell.value = document.querySelector(".system-input").value || "BÁO GIÁ";
+    titleCell.font = { bold: true, size: 16 };
+    titleCell.alignment = center;
 
-    titleCell.value =
-        document.querySelector(".system-input").value ||
-        "BÁO GIÁ";
-
-    titleCell.font = {
-        bold: true,
-        size: 16
-    };
-
-    titleCell.alignment = {
-        horizontal: "center",
-        vertical: "middle"
-    };
-
-    // Header
-    const headers = [
+    const headerRow = sheet.addRow([
         "STT",
         "Tên Sản Phẩm",
         "Vật liệu",
@@ -400,12 +334,9 @@ async function exportExcel() {
         "Đơn giá",
         "Thành tiền",
         "Xuất xứ/Ghi chú"
-    ];
-
-    const headerRow = sheet.addRow(headers);
+    ]);
 
     headerRow.eachCell(cell => {
-
         cell.fill = {
             type: "pattern",
             pattern: "solid",
@@ -417,123 +348,74 @@ async function exportExcel() {
             color: { argb: "000000" }
         };
 
-        cell.alignment = {
-            horizontal: "center",
-            vertical: "middle",
-            wrapText: true
-        };
-
-        cell.border = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" }
-        };
+        cell.alignment = center;
+        cell.border = border;
     });
 
-    // Dữ liệu
-    document.querySelectorAll("#body tr")
-.forEach(row => {
+    document.querySelectorAll("#body tr").forEach(row => {
 
-    const cells = row.children;
+        const c = row.children;
 
-    const excelRow = sheet.addRow([
+        const excelRow = sheet.addRow([
+            c[0].innerText,
+            c[1].querySelector(".product-search")?.value || "",
+            c[2].querySelector("select")?.value || "",
+            c[3].querySelector(".spec")?.value || "",
+            Number(c[4].querySelector("input[type='number']")?.value || 0),
+            c[5].innerText,
+            Number(c[6].innerText.replace(/\./g, "")),
+            "",
+            c[8].querySelector(".origin")?.value || ""
+        ]);
 
-        cells[0].innerText,
+        const rowNum = excelRow.number;
 
-        cells[1].querySelector(".product-search")?.value || "",
+        excelRow.getCell(8).value = {
+            formula: `E${rowNum}*G${rowNum}`
+        };
 
-        cells[2].querySelector("select")?.value || "",
+        excelRow.getCell(8).numFmt = "#,##0";
+    });
 
-        cells[3].querySelector(".spec")?.value || "",
-
-        Number(
-            cells[4].querySelector("input[type='number']")?.value || 0
-        ),
-
-        cells[5].innerText,
-
-        Number(
-            cells[6].innerText.replace(/\./g, "")
-        ),
-
-        "",
-
-        cells[8].querySelector(".origin")?.value || ""
-
-    ]);
-
-    const rowNum = excelRow.number;
-
-    excelRow.getCell(8).value = {
-        formula: `E${rowNum}*G${rowNum}`
-    };
-
-    excelRow.getCell(8).numFmt = '#,##0';
-
-});
-
-    // Format toàn bộ bảng
     sheet.eachRow((row, rowNumber) => {
 
-    if (rowNumber <= 2) return;
+        if (rowNumber <= 2) return;
 
-    row.eachCell(cell => {
+        row.eachCell(cell => {
+            cell.font = { name: "Arial", size: 12.5 };
+            cell.alignment = center;
+            cell.border = border;
+        });
 
-        cell.font = {
-            name: "Arial",
-            size: 12.5
-        };
+        if (row.getCell(7).value) {
+            row.getCell(7).font = {
+                name: "Times New Roman",
+                size: 12.5,
+                bold: true
+            };
 
-        cell.alignment = {
-            horizontal: "center",
-            vertical: "middle",
-            wrapText: true
-        };
+            row.getCell(7).alignment = {
+                horizontal: "right",
+                vertical: "middle"
+            };
 
-        cell.border = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" }
-        };
+            row.getCell(7).numFmt = "#,##0";
+        }
+
+        if (row.getCell(8).value) {
+            row.getCell(8).font = {
+                name: "Times New Roman",
+                size: 12.5,
+                bold: true
+            };
+
+            row.getCell(8).alignment = {
+                horizontal: "right",
+                vertical: "middle"
+            };
+        }
     });
 
-    // Cột G = Đơn giá
-   // Cột G = Đơn giá
-if (row.getCell(7).value) {
-
-    row.getCell(7).font = {
-        name: "Times New Roman",
-        size: 12.5,
-        bold: true
-    };
-
-    row.getCell(7).alignment = {
-        horizontal: "right",
-        vertical: "middle"
-    };
-
-    // Number thật, hiển thị 9,000,000
-    row.getCell(7).numFmt = '#,##0';
-}
-
-    // Cột H = Thành tiền
-    if (row.getCell(8).value) {
-        row.getCell(8).font = {
-            name: "Times New Roman",
-            size: 12.5,
-            bold: true
-        };
-
-        row.getCell(8).alignment = {
-            horizontal: "right",
-            vertical: "middle"
-        };
-    }
-
-});
-    // Độ rộng cột
     sheet.columns = [
         { width: 8 },
         { width: 35 },
@@ -546,47 +428,23 @@ if (row.getCell(7).value) {
         { width: 25 }
     ];
 
-    // Tổng cộng
-    const total =
-        document.getElementById("total").innerText;
-
     const totalRow = sheet.addRow([
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        "", "", "", "", "", "",
         "TỔNG CỘNG",
-        total
+        document.getElementById("total").innerText
     ]);
 
     totalRow.eachCell(cell => {
-
         cell.font = { bold: true };
-
-        cell.border = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" }
-        };
+        cell.border = border;
     });
 
-    const buffer =
-        await workbook.xlsx.writeBuffer();
-
-    saveAs(
-        new Blob([buffer]),
-        "BaoGia.xlsx"
-    );
+    const buffer = await workbook.xlsx.writeBuffer();
+    saveAs(new Blob([buffer]), "BaoGia.xlsx");
 }
 
 function removeVietnameseTones(str) {
-
-    if (!str) return "";
-
-    return String(str)
+    return String(str || "")
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/đ/g, "d")
