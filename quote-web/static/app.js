@@ -484,19 +484,23 @@ async function exportExcel() {
     });
 
     // Cột G = Đơn giá
-    if (row.getCell(7).value) {
-        row.getCell(7).font = {
-            name: "Times New Roman",
-            size: 12.5,
-            bold: true
-        };
+   // Cột G = Đơn giá
+if (row.getCell(7).value) {
 
-        row.getCell(7).alignment = {
-            horizontal: "right",
-            vertical: "middle"
-        };
-        row.getCell(7).numFmt = "0";
-    }
+    row.getCell(7).font = {
+        name: "Times New Roman",
+        size: 12.5,
+        bold: true
+    };
+
+    row.getCell(7).alignment = {
+        horizontal: "right",
+        vertical: "middle"
+    };
+
+    // Number thật, hiển thị 9,000,000
+    row.getCell(7).numFmt = '#,##0';
+}
 
     // Cột H = Thành tiền
     if (row.getCell(8).value) {
