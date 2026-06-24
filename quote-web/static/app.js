@@ -438,23 +438,32 @@ async function exportExcel() {
             const cells = row.children;
 
             sheet.addRow([
+    const excelRow = sheet.addRow([
     cells[0].innerText,
     cells[1].querySelector(".product-search")?.value || "",
     cells[2].querySelector("select")?.value || "",
     cells[3].querySelector(".spec")?.value || "",
-    cells[4].querySelector("input[type='number']")?.value || "",
+    Number(
+        cells[4].querySelector("input[type='number']")?.value || 0
+    ),
     cells[5].innerText,
-
-    // Đơn giá -> số
     Number(
         cells[6].innerText.replace(/\./g, "")
     ),
-
-    // Thành tiền -> giữ nguyên định dạng hiển thị
-    cells[7].innerText,
-
+    "",
+     cells[7].innerText,
     cells[8].querySelector(".origin")?.value || ""
 ]);
+
+  const rowNumber = excelRow.number;
+
+excelRow.getCell(8).value = {
+    formula: `E${rowNumber}*G${rowNumber}`
+};
+
+excelRow.getCell(8).numFmt = '#,##0';
+
+
         });
 
     // Format toàn bộ bảng
