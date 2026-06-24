@@ -438,16 +438,23 @@ async function exportExcel() {
             const cells = row.children;
 
             sheet.addRow([
-                cells[0].innerText,
-                cells[1].querySelector(".product-search")?.value || "",
-                cells[2].querySelector("select")?.value || "",
-                cells[3].querySelector(".spec")?.value || "",
-                cells[4].querySelector("input[type='number']")?.value || "",
-                cells[5].innerText,
-                cells[6].innerText,
-                cells[7].innerText,
-                cells[8].querySelector(".origin")?.value || ""
-            ]);
+    cells[0].innerText,
+    cells[1].querySelector(".product-search")?.value || "",
+    cells[2].querySelector("select")?.value || "",
+    cells[3].querySelector(".spec")?.value || "",
+    cells[4].querySelector("input[type='number']")?.value || "",
+    cells[5].innerText,
+
+    // Đơn giá -> số
+    Number(
+        cells[6].innerText.replace(/\./g, "")
+    ),
+
+    // Thành tiền -> giữ nguyên định dạng hiển thị
+    cells[7].innerText,
+
+    cells[8].querySelector(".origin")?.value || ""
+]);
         });
 
     // Format toàn bộ bảng
@@ -488,6 +495,7 @@ async function exportExcel() {
             horizontal: "right",
             vertical: "middle"
         };
+        row.getCell(7).numFmt = "0";
     }
 
     // Cột H = Thành tiền
