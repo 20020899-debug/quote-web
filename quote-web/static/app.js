@@ -433,38 +433,45 @@ async function exportExcel() {
 
     // Dữ liệu
     document.querySelectorAll("#body tr")
-        .forEach(row => {
+.forEach(row => {
 
-            const cells = row.children;
+    const cells = row.children;
 
-            sheet.addRow([
     const excelRow = sheet.addRow([
-    cells[0].innerText,
-    cells[1].querySelector(".product-search")?.value || "",
-    cells[2].querySelector("select")?.value || "",
-    cells[3].querySelector(".spec")?.value || "",
-    Number(
-        cells[4].querySelector("input[type='number']")?.value || 0
-    ),
-    cells[5].innerText,
-    Number(
-        cells[6].innerText.replace(/\./g, "")
-    ),
-    "",
-     cells[7].innerText,
-    cells[8].querySelector(".origin")?.value || ""
-]);
 
-  const rowNumber = excelRow.number;
+        cells[0].innerText,
 
-excelRow.getCell(8).value = {
-    formula: `E${rowNumber}*G${rowNumber}`
-};
+        cells[1].querySelector(".product-search")?.value || "",
 
-excelRow.getCell(8).numFmt = '#,##0';
+        cells[2].querySelector("select")?.value || "",
 
+        cells[3].querySelector(".spec")?.value || "",
 
-        });
+        Number(
+            cells[4].querySelector("input[type='number']")?.value || 0
+        ),
+
+        cells[5].innerText,
+
+        Number(
+            cells[6].innerText.replace(/\./g, "")
+        ),
+
+        "",
+
+        cells[8].querySelector(".origin")?.value || ""
+
+    ]);
+
+    const rowNum = excelRow.number;
+
+    excelRow.getCell(8).value = {
+        formula: `E${rowNum}*G${rowNum}`
+    };
+
+    excelRow.getCell(8).numFmt = '#,##0';
+
+});
 
     // Format toàn bộ bảng
     sheet.eachRow((row, rowNumber) => {
