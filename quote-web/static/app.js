@@ -57,7 +57,7 @@ function addRow() {
     </td>
 
     <td>
-        <input type="number" value="1" min="0" step="0.01" oninput="calcRow(this)">
+        <input type="number" value="1" min="0" step="1" oninput="calcRow(this)">
     </td>
 
     <td class="unit"></td>
