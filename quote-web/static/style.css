@@ -211,7 +211,7 @@ td button:hover {
     position: absolute;
     left: 0;
     top: 100%;
-    width: 1000px;          
+    width: 500px;          
     background: white;
     border: 1px solid #ccc;
     max-height: 500px;
