@@ -127,7 +127,7 @@ function searchProduct(input) {
         const div = document.createElement("div");
         div.className = "dropdown-item";
 
-        const tenHienThi = String(item.TenSP).split("\n")[0];
+        const tenHienThi = String(item.TenSP).split("\n").slice(0, 2).join("<br>");
 
         div.innerHTML = `<b>${tenHienThi}</b>`;
         div.onclick = () => selectProduct(input, item);
