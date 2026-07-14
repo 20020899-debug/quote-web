@@ -214,7 +214,7 @@ td button:hover {
     width: 700px;          
     background: white;
     border: 1px solid #ccc;
-    max-height: 500px;
+    max-height: 250px;
     overflow-y: auto;
     z-index: 999;
     display: none;
