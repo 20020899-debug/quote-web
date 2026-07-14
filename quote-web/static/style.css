@@ -61,7 +61,7 @@ body {
    TABLE WRAPPER (CUỘN NGANG)
 ===================================================== */
 .table-wrapper {
-    min-height:800px;
+    min-height:200px;
     overflow:auto;
     border: 1px solid #ddd;
     border-radius: 8px;
