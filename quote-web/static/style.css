@@ -23,7 +23,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    min-height: 1000px;
+    min-height: 700px;
 }
 
 /* =====================================================
@@ -72,7 +72,7 @@ body {
 ===================================================== */
 table {
     width: 100%;
-    min-width: 1200px;
+    min-width: 2000px;
     border-collapse: collapse;
     background: white;
 }
